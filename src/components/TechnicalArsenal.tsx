@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Cloud, Container, Settings, GitBranch, Shield, BarChart3, Code, Palette } from 'lucide-react';
+import { Cloud, Container, Settings, GitBranch, Shield, BarChart3, Code, Palette, Award, ExternalLink } from 'lucide-react';
 
 const TechnicalArsenal = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -104,6 +104,41 @@ const TechnicalArsenal = () => {
     }
   ];
 
+  const certifications = [
+    {
+      title: "DevSecOps - Kubernetes DevOps & Security",
+      issuer: "KodeKloud",
+      date: "February 2025",
+      credentialId: "a202d9e5-7c2e-431c-b1ff-715f0828b649",
+      skills: ["Kubernetes", "Jenkins", "GitHub", "Docker"],
+      color: "text-red-400"
+    },
+    {
+      title: "Advance DevOps - Zero To Hero",
+      issuer: "TrainWithShubham",
+      date: "September 2023",
+      credentialId: "AB6D5KS7",
+      skills: ["AWS", "Kubernetes", "Grafana", "Prometheus", "Jenkins", "GitHub", "Linux", "Amazon EKS", "HELM", "Ansible", "Docker", "Amazon ECS"],
+      color: "text-blue-400"
+    },
+    {
+      title: "Certified Kubernetes Application Developer (CKAD)",
+      issuer: "KodeKloud",
+      date: "April 2023",
+      credentialId: "2D08AB28F228-2D08A5324D6D-2D08A4F60502",
+      skills: ["Kubernetes"],
+      color: "text-green-400"
+    },
+    {
+      title: "Docker Training Course for the Absolute Beginner",
+      issuer: "KodeKloud",
+      date: "April 2023",
+      credentialId: "2D08AB28F228-2D08A5322726-2D08A4F60502",
+      skills: ["Git", "Docker Products"],
+      color: "text-cyan-400"
+    }
+  ];
+
   return (
     <section id="technical-arsenal" className="py-20 bg-black/20">
       <div className="container mx-auto px-6">
@@ -116,7 +151,7 @@ const TechnicalArsenal = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-16">
           {skillCategories.map((category, categoryIndex) => (
             <div key={categoryIndex} className="project-card">
               <div className="flex items-center mb-6">
@@ -153,31 +188,52 @@ const TechnicalArsenal = () => {
           ))}
         </div>
 
-        {/* Certifications */}
-        <div className="mt-16 text-center">
-          <h3 className="text-2xl font-bold text-white mb-8 font-sans">Certifications & Training</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
-            <div className="bg-black/30 border border-gray-700 rounded-lg p-4">
-              <span className="text-green-400 font-semibold">Certified Kubernetes Application Developer (CKAD)</span>
-            </div>
-            <div className="bg-black/30 border border-gray-700 rounded-lg p-4">
-              <span className="text-blue-400 font-semibold">Advance DevOps - Zero To Hero</span>
-            </div>
-            <div className="bg-black/30 border border-gray-700 rounded-lg p-4">
-              <span className="text-purple-400 font-semibold">DevSecOps - Kubernetes DevOps & Security</span>
-            </div>
+        {/* Professional Certifications */}
+        <div className="mb-16">
+          <h3 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+            Professional Certifications
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
+            {certifications.map((cert, index) => (
+              <div key={index} className="project-card">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center">
+                    <Award className={`w-8 h-8 ${cert.color} mr-3`} />
+                    <div>
+                      <h4 className="text-white font-bold text-lg font-sans">{cert.title}</h4>
+                      <p className="text-gray-400 font-sans">{cert.issuer} • {cert.date}</p>
+                    </div>
+                  </div>
+                  <ExternalLink className="w-4 h-4 text-gray-400" />
+                </div>
+                
+                <div className="mb-4">
+                  <p className="text-gray-300 text-sm font-mono">
+                    <span className="text-gray-500">Credential ID:</span> {cert.credentialId}
+                  </p>
+                </div>
+                
+                <div className="flex flex-wrap gap-2">
+                  {cert.skills.map((skill, skillIndex) => (
+                    <span key={skillIndex} className={`px-2 py-1 rounded text-xs ${cert.color} bg-black/30 border border-current`}>
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
         {/* Quick stats */}
-        <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-3xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-3xl mx-auto">
           <div className="text-center">
             <div className="text-2xl font-bold text-green-400 neon-glow">5+</div>
             <div className="text-gray-400 text-sm font-sans">Years Experience</div>
           </div>
           <div className="text-center">
-            <div className="text-2xl font-bold text-blue-400 neon-glow">25+</div>
-            <div className="text-gray-400 text-sm font-sans">Automation Scripts</div>
+            <div className="text-2xl font-bold text-blue-400 neon-glow">4</div>
+            <div className="text-gray-400 text-sm font-sans">Active Certifications</div>
           </div>
           <div className="text-center">
             <div className="text-2xl font-bold text-purple-400 neon-glow">135+</div>
