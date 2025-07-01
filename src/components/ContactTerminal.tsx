@@ -66,7 +66,8 @@ const ContactTerminal = () => {
       { type: 'output', text: '☁️  AWS cloud infrastructure expert' },
       { type: 'output', text: '🎨 UI/UX developer with 135+ landing pages' },
       { type: 'output', text: '⚡ AutoHotkey automation specialist' },
-      { type: 'output', text: '📈 Proven track record: $12K annual savings' }
+      { type: 'output', text: '📈 Proven track record: $12K annual savings' },
+      { type: 'output', text: '🏆 GitHub Top 1% Contributor' }
     ],
     clear: () => {
       setOutput([
@@ -77,32 +78,29 @@ const ContactTerminal = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!input.trim()) return;
-
+  const executeCommand = (command: string) => {
     setIsTyping(true);
     const newOutput = [...output];
     
     // Add user input
-    newOutput.push({ type: 'input', text: `$ ${input}` });
+    newOutput.push({ type: 'input', text: `$ ${command}` });
 
     // Process command
-    const command = input.toLowerCase().trim();
-    if (commands[command as keyof typeof commands]) {
-      const result = commands[command as keyof typeof commands]();
+    const cmd = command.toLowerCase().trim();
+    if (commands[cmd as keyof typeof commands]) {
+      const result = commands[cmd as keyof typeof commands]();
       if (result.length > 0) {
         newOutput.push(...result);
       }
     } else {
       newOutput.push({ 
         type: 'error', 
-        text: `Command not found: ${input}. Type "help" for available commands.` 
+        text: `Command not found: ${command}. Type "help" for available commands.` 
       });
     }
 
     // Add new prompt
-    if (command !== 'clear') {
+    if (cmd !== 'clear') {
       newOutput.push({ type: 'prompt', text: 'pradeep@contact:~$' });
     }
 
@@ -111,6 +109,17 @@ const ContactTerminal = () => {
       setInput('');
       setIsTyping(false);
     }, 500);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!input.trim()) return;
+    executeCommand(input);
+  };
+
+  const handleQuickButton = (command: string) => {
+    setInput(command);
+    executeCommand(command);
   };
 
   useEffect(() => {
@@ -139,7 +148,7 @@ const ContactTerminal = () => {
             Contact Terminal
           </h2>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto font-sans">
-            Interactive CLI interface for getting in touch. Try typing "help" to see available commands.
+            Interactive CLI interface for getting in touch. Click the buttons below for instant contact actions.
           </p>
         </div>
 
@@ -163,7 +172,7 @@ const ContactTerminal = () => {
                 </div>
               ))}
               {isTyping && (
-                <div className="text-gray-400 font-mono text-sm">
+                <div className="text-gray-400 font-mono text-sm animate-pulse">
                   Processing command...
                 </div>
               )}
@@ -177,52 +186,52 @@ const ContactTerminal = () => {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 className="flex-1 bg-transparent text-white font-mono text-sm outline-none"
-                placeholder="Type a command..."
+                placeholder="Type a command or click buttons below..."
                 autoFocus
               />
               <span className="terminal-cursor ml-1"></span>
             </form>
           </div>
 
-          {/* Quick contact buttons */}
+          {/* Quick contact buttons with auto-execution */}
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mt-8">
             <button 
-              onClick={() => setInput('contact --email')}
-              className="flex items-center justify-center px-4 py-3 bg-black/50 border border-gray-700 rounded-lg hover:border-green-400 transition-colors group"
+              onClick={() => handleQuickButton('contact --email')}
+              className="flex items-center justify-center px-4 py-3 bg-black/50 border border-gray-700 rounded-lg hover:border-green-400 transition-all duration-300 group hover:scale-105"
             >
-              <Mail className="w-5 h-5 text-green-400 mr-2 group-hover:animate-pulse" />
+              <Mail className="w-5 h-5 text-green-400 mr-2 group-hover:animate-bounce" />
               <span className="text-gray-300 font-sans">Email</span>
             </button>
             
             <button 
-              onClick={() => setInput('contact --phone')}
-              className="flex items-center justify-center px-4 py-3 bg-black/50 border border-gray-700 rounded-lg hover:border-yellow-400 transition-colors group"
+              onClick={() => handleQuickButton('contact --phone')}
+              className="flex items-center justify-center px-4 py-3 bg-black/50 border border-gray-700 rounded-lg hover:border-yellow-400 transition-all duration-300 group hover:scale-105"
             >
-              <Phone className="w-5 h-5 text-yellow-400 mr-2 group-hover:animate-pulse" />
+              <Phone className="w-5 h-5 text-yellow-400 mr-2 group-hover:animate-bounce" />
               <span className="text-gray-300 font-sans">Phone</span>
             </button>
             
             <button 
-              onClick={() => setInput('contact --linkedin')}
-              className="flex items-center justify-center px-4 py-3 bg-black/50 border border-gray-700 rounded-lg hover:border-blue-400 transition-colors group"
+              onClick={() => handleQuickButton('contact --linkedin')}
+              className="flex items-center justify-center px-4 py-3 bg-black/50 border border-gray-700 rounded-lg hover:border-blue-400 transition-all duration-300 group hover:scale-105"
             >
-              <Linkedin className="w-5 h-5 text-blue-400 mr-2 group-hover:animate-pulse" />
+              <Linkedin className="w-5 h-5 text-blue-400 mr-2 group-hover:animate-bounce" />
               <span className="text-gray-300 font-sans">LinkedIn</span>
             </button>
             
             <button 
-              onClick={() => setInput('contact --github')}
-              className="flex items-center justify-center px-4 py-3 bg-black/50 border border-gray-700 rounded-lg hover:border-purple-400 transition-colors group"
+              onClick={() => handleQuickButton('contact --github')}
+              className="flex items-center justify-center px-4 py-3 bg-black/50 border border-gray-700 rounded-lg hover:border-purple-400 transition-all duration-300 group hover:scale-105"
             >
-              <Github className="w-5 h-5 text-purple-400 mr-2 group-hover:animate-pulse" />
+              <Github className="w-5 h-5 text-purple-400 mr-2 group-hover:animate-bounce" />
               <span className="text-gray-300 font-sans">GitHub</span>
             </button>
             
             <button 
-              onClick={() => setInput('download --resume')}
-              className="flex items-center justify-center px-4 py-3 bg-black/50 border border-gray-700 rounded-lg hover:border-cyan-400 transition-colors group"
+              onClick={() => handleQuickButton('download --resume')}
+              className="flex items-center justify-center px-4 py-3 bg-black/50 border border-gray-700 rounded-lg hover:border-cyan-400 transition-all duration-300 group hover:scale-105"
             >
-              <Download className="w-5 h-5 text-cyan-400 mr-2 group-hover:animate-pulse" />
+              <Download className="w-5 h-5 text-cyan-400 mr-2 group-hover:animate-bounce" />
               <span className="text-gray-300 font-sans">Resume</span>
             </button>
           </div>

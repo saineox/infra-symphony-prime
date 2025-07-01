@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Terminal, Code, Server, GitBranch } from 'lucide-react';
+import { Terminal, Code, Server, GitBranch, Star, Users, Trophy } from 'lucide-react';
 
 const Hero = () => {
   const [typedText, setTypedText] = useState('');
@@ -51,7 +51,8 @@ const Hero = () => {
               <div className="terminal-text mt-2 text-green-300">
                 <span>✓ Profile loaded successfully</span><br />
                 <span>✓ Automation workflows: ACTIVE</span><br />
-                <span>✓ Cloud infrastructure: OPTIMIZED</span>
+                <span>✓ Cloud infrastructure: OPTIMIZED</span><br />
+                <span>✓ GitHub Status: TOP 1% CONTRIBUTOR</span>
               </div>
             )}
           </div>
@@ -65,6 +66,17 @@ const Hero = () => {
             <span className="text-green-400 neon-glow">DevOps Engineer</span>
             <span className="text-gray-400 mx-2">+</span>
             <span className="text-blue-400 neon-glow">UI/UX Developer</span>
+          </div>
+
+          {/* GitHub Achievement Badge */}
+          <div className="flex justify-center mb-8">
+            <div className="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/50 rounded-lg px-6 py-3 backdrop-blur-sm">
+              <div className="flex items-center space-x-3 text-yellow-400">
+                <Trophy className="w-6 h-6" />
+                <span className="font-semibold">GitHub Top 1% Contributor</span>
+                <Star className="w-5 h-5" />
+              </div>
+            </div>
           </div>
 
           {/* Tagline */}
@@ -102,8 +114,12 @@ const Hero = () => {
             </p>
           </div>
 
-          {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 max-w-2xl mx-auto">
+          {/* Enhanced Stats with GitHub achievements */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mt-16 max-w-4xl mx-auto">
+            <div className="text-center">
+              <div className="text-3xl font-bold text-yellow-400 neon-glow">Top 1%</div>
+              <div className="text-gray-400 text-sm">GitHub Contributor</div>
+            </div>
             <div className="text-center">
               <div className="text-3xl font-bold text-green-400 neon-glow">135+</div>
               <div className="text-gray-400 text-sm">Landing Pages Built</div>

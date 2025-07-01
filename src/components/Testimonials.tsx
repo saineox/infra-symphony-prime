@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Quote, Star, Linkedin } from 'lucide-react';
+import { Quote, Star, Linkedin, ExternalLink } from 'lucide-react';
 
 const Testimonials = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -28,6 +28,7 @@ const Testimonials = () => {
       company: "Blackbaud",
       relationship: "Worked on the same team",
       date: "May 2025",
+      linkedinUrl: "https://www.linkedin.com/in/maripool/",
       content: "Pradeep is consistently reliable and technically strong in a variety of areas. He picks up new technologies quickly and contributes effectively without needing much ramp-up time. He's dependable, smart, and easy to work with—a solid team member who delivers.",
       highlights: ["Technically Strong", "Quick Learner", "Reliable", "Team Player"]
     },
@@ -37,6 +38,7 @@ const Testimonials = () => {
       company: "Former Colleague",
       relationship: "Worked on the same team",
       date: "May 2025",
+      linkedinUrl: "https://www.linkedin.com/in/corwinbermudez/",
       content: "As Pradeep's former colleague my whole team and I leaned on his ability to navigate complex workflows to meet customer needs quickly. His front-end scripting and data language experience makes him a valuable asset for supplementing customer-facing apps with customizable content and experiences. Pradeep worked quickly to learn techniques and languages we did not know, and elevated our team's processes consistently during his tenure.",
       highlights: ["Complex Workflows", "Customer-Focused", "Process Improvement", "Quick Learner"]
     },
@@ -46,6 +48,7 @@ const Testimonials = () => {
       company: "EVERFI",
       relationship: "Worked on the same team",
       date: "May 2025",
+      linkedinUrl: "https://www.linkedin.com/in/derek-iwanowski/",
       content: "I highly recommend Pradeep as he is a very strong and dedicated worker who collaborates well with others. Pradeep is reliable and has a lot of technical knowledge. I believe he would be an asset to any team.",
       highlights: ["Dedicated", "Technical Knowledge", "Collaborative", "Asset to Team"]
     },
@@ -55,6 +58,7 @@ const Testimonials = () => {
       company: "Citi | Ex-Disney",
       relationship: "Academic & Professional Connection",
       date: "March 2024",
+      linkedinUrl: "https://www.linkedin.com/in/sunil-ajagekar/",
       content: "I highly recommend Pradeep for his exceptional development and DevOps skills. Having known him closely throughout our academic journey, I've witnessed his dedication and proficiency in tackling complex technical challenges. Pradeep's combination of strong academic background and hands-on expertise makes him a valuable asset to any team.",
       highlights: ["DevOps Excellence", "Complex Problem Solving", "Academic Excellence", "Hands-on Expertise"]
     },
@@ -64,6 +68,7 @@ const Testimonials = () => {
       company: "v-shesh",
       relationship: "Mentor",
       date: "May 2025",
+      linkedinUrl: "https://www.linkedin.com/in/nalini-sagar/",
       content: "Pradeep is one of our Codestar trainee, during the training period, he really performed well. he did a great job in his team project. good luck pradeep for your future endeavors.",
       highlights: ["Top Performer", "Team Project Excellence", "Training Success", "Mentorship"]
     },
@@ -73,13 +78,14 @@ const Testimonials = () => {
       company: "Strategic Insights Professional",
       relationship: "Professional Network",
       date: "February 2024",
+      linkedinUrl: "https://www.linkedin.com/in/abhijit-patil-analytics/",
       content: "I have no doubt that Pradeep's transition into a DevOps Engineer role will be met with the same level of enthusiasm and proficiency that he brought to the Organization. He has all the qualities necessary to excel in this new endeavor, and I wholeheartedly recommend him for any future opportunities.",
       highlights: ["Career Transition", "Enthusiasm", "Proficiency", "Future Potential"]
     }
   ];
 
   return (
-    <section id="testimonials" className="py-20 bg-black/10">
+    <section className="py-20 bg-black/10">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
@@ -101,7 +107,18 @@ const Testimonials = () => {
             >
               <div className="flex items-start justify-between mb-4">
                 <Quote className="w-8 h-8 text-blue-400 flex-shrink-0" />
-                <Linkedin className="w-5 h-5 text-blue-400" />
+                <a
+                  href={testimonial.linkedinUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-400 hover:text-blue-300 transition-colors group"
+                  title="View LinkedIn Profile"
+                >
+                  <div className="flex items-center space-x-1">
+                    <Linkedin className="w-5 h-5" />
+                    <ExternalLink className="w-3 h-3 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                  </div>
+                </a>
               </div>
               
               <p className="text-gray-300 mb-6 leading-relaxed font-sans text-sm">
