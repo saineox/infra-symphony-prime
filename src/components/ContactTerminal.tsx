@@ -1,11 +1,11 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Mail, Linkedin, Github, Download } from 'lucide-react';
+import { Mail, Linkedin, Github, Download, Phone } from 'lucide-react';
 
 const ContactTerminal = () => {
   const [input, setInput] = useState('');
   const [output, setOutput] = useState([
-    { type: 'system', text: 'Welcome to Pradeep Traje DevOps Terminal v2.1.0' },
+    { type: 'system', text: 'Welcome to Pradeep Kadam DevOps Terminal v2.1.0' },
     { type: 'system', text: 'Type "help" for available commands' },
     { type: 'prompt', text: 'pradeep@contact:~$' }
   ]);
@@ -17,6 +17,7 @@ const ContactTerminal = () => {
     help: () => [
       { type: 'output', text: 'Available commands:' },
       { type: 'output', text: '  contact --email     - Get email address' },
+      { type: 'output', text: '  contact --phone     - Get phone number' },
       { type: 'output', text: '  contact --linkedin  - Open LinkedIn profile' },
       { type: 'output', text: '  contact --github    - Open GitHub profile' },
       { type: 'output', text: '  download --resume   - Download resume' },
@@ -24,16 +25,28 @@ const ContactTerminal = () => {
       { type: 'output', text: '  clear              - Clear terminal' },
       { type: 'output', text: '  whoami             - About me' }
     ],
-    'contact --email': () => [
-      { type: 'success', text: '📧 Email: pradeep.traje@devops.com' },
-      { type: 'output', text: 'Email copied to clipboard!' }
-    ],
+    'contact --email': () => {
+      // Copy email to clipboard
+      navigator.clipboard.writeText('pradeeptraje@gmail.com');
+      return [
+        { type: 'success', text: '📧 Email: pradeeptraje@gmail.com' },
+        { type: 'output', text: 'Email copied to clipboard!' }
+      ];
+    },
+    'contact --phone': () => {
+      // Copy phone to clipboard  
+      navigator.clipboard.writeText('+1 (922) 632-5101');
+      return [
+        { type: 'success', text: '📱 Phone: +1 (922) 632-5101' },
+        { type: 'output', text: 'Phone number copied to clipboard!' }
+      ];
+    },
     'contact --linkedin': () => {
       window.open('https://www.linkedin.com/in/pradeeptraje/', '_blank');
       return [{ type: 'success', text: '🔗 Opening LinkedIn profile...' }];
     },
     'contact --github': () => {
-      window.open('https://github.com/saineox', '_blank');
+      window.open('https://github.com/pradeeptraje', '_blank');
       return [{ type: 'success', text: '🐙 Opening GitHub profile...' }];
     },
     'download --resume': () => [
@@ -41,17 +54,19 @@ const ContactTerminal = () => {
       { type: 'output', text: 'Resume.pdf downloaded successfully!' }
     ],
     status: () => [
-      { type: 'success', text: '✅ Infrastructure Status: OPERATIONAL' },
+      { type: 'success', text: '✅ DevOps Status: OPERATIONAL' },
       { type: 'success', text: '✅ Available for new opportunities' },
       { type: 'success', text: '✅ Response time: < 24 hours' },
-      { type: 'output', text: '📍 Location: Remote-first' }
+      { type: 'success', text: '✅ Immediate joiner ready' },
+      { type: 'output', text: '📍 Location: United States (Remote)' }
     ],
     whoami: () => [
-      { type: 'output', text: 'Pradeep Traje - Senior DevOps Engineer' },
-      { type: 'output', text: '🚀 Specializing in cloud-native infrastructure' },
-      { type: 'output', text: '☁️  Multi-cloud architecture expert' },
-      { type: 'output', text: '🛡️  Security-first automation advocate' },
-      { type: 'output', text: '📈 Proven track record of cost optimization' }
+      { type: 'output', text: 'Pradeep Kadam - DevOps Engineer & UI/UX Developer' },
+      { type: 'output', text: '🚀 Specializing in automation and cost optimization' },
+      { type: 'output', text: '☁️  AWS cloud infrastructure expert' },
+      { type: 'output', text: '🎨 UI/UX developer with 135+ landing pages' },
+      { type: 'output', text: '⚡ AutoHotkey automation specialist' },
+      { type: 'output', text: '📈 Proven track record: $12K annual savings' }
     ],
     clear: () => {
       setOutput([
@@ -170,13 +185,21 @@ const ContactTerminal = () => {
           </div>
 
           {/* Quick contact buttons */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-8">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mt-8">
             <button 
               onClick={() => setInput('contact --email')}
               className="flex items-center justify-center px-4 py-3 bg-black/50 border border-gray-700 rounded-lg hover:border-green-400 transition-colors group"
             >
               <Mail className="w-5 h-5 text-green-400 mr-2 group-hover:animate-pulse" />
               <span className="text-gray-300 font-sans">Email</span>
+            </button>
+            
+            <button 
+              onClick={() => setInput('contact --phone')}
+              className="flex items-center justify-center px-4 py-3 bg-black/50 border border-gray-700 rounded-lg hover:border-yellow-400 transition-colors group"
+            >
+              <Phone className="w-5 h-5 text-yellow-400 mr-2 group-hover:animate-pulse" />
+              <span className="text-gray-300 font-sans">Phone</span>
             </button>
             
             <button 

@@ -5,7 +5,7 @@ import { Terminal, Code, Server, GitBranch } from 'lucide-react';
 const Hero = () => {
   const [typedText, setTypedText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
-  const fullText = 'deploy --profile "Pradeep Traje: Senior DevOps Engineer"';
+  const fullText = 'deploy --profile "Pradeep Kadam: DevOps Engineer & UI/UX Developer"';
 
   useEffect(() => {
     if (currentIndex < fullText.length) {
@@ -42,7 +42,7 @@ const Hero = () => {
             </div>
             
             <div className="terminal-text">
-              <span className="terminal-prompt">pradeep@devops-elite:~$</span>
+              <span className="terminal-prompt">pradeep@devops-portfolio:~$</span>
               <span className="ml-2">{typedText}</span>
               <span className="terminal-cursor"></span>
             </div>
@@ -50,51 +50,71 @@ const Hero = () => {
             {currentIndex >= fullText.length && (
               <div className="terminal-text mt-2 text-green-300">
                 <span>✓ Profile loaded successfully</span><br />
-                <span>✓ Infrastructure orchestration: READY</span><br />
-                <span>✓ Automation pipeline: ACTIVE</span>
+                <span>✓ Automation workflows: ACTIVE</span><br />
+                <span>✓ Cloud infrastructure: OPTIMIZED</span>
               </div>
             )}
           </div>
 
           {/* Main heading */}
           <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-green-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
-            Pradeep Traje
+            Pradeep Kadam
           </h1>
           
           <div className="text-xl md:text-2xl text-gray-300 mb-8 font-sans">
-            <span className="text-green-400 neon-glow">Senior DevOps Engineer</span>
+            <span className="text-green-400 neon-glow">DevOps Engineer</span>
+            <span className="text-gray-400 mx-2">+</span>
+            <span className="text-blue-400 neon-glow">UI/UX Developer</span>
           </div>
 
           {/* Tagline */}
-          <p className="text-lg md:text-xl text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed">
-            <span className="text-cyan-400">"Transforming Infrastructure Chaos</span>
+          <p className="text-lg md:text-xl text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed">
+            <span className="text-cyan-400">"Great infrastructure is invisible—it just works.</span>
             <br />
-            <span className="text-green-400">into Automated Symphony"</span>
+            <span className="text-green-400">Automation is the secret sauce that makes it possible."</span>
           </p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <button className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 neon-border border-green-500 hover:shadow-lg hover:scale-105">
-              View Infrastructure
-            </button>
-            <button className="border border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 hover:shadow-lg hover:scale-105">
-              Download Resume
-            </button>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+            <a 
+              href="https://www.linkedin.com/in/pradeeptraje/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 neon-border border-green-500 hover:shadow-lg hover:scale-105"
+            >
+              View LinkedIn Profile
+            </a>
+            <a 
+              href="mailto:pradeeptraje@gmail.com"
+              className="border border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 hover:shadow-lg hover:scale-105"
+            >
+              Contact Me
+            </a>
+          </div>
+
+          {/* Contact Info */}
+          <div className="text-center mb-12">
+            <p className="text-gray-400 mb-2">
+              📧 <a href="mailto:pradeeptraje@gmail.com" className="text-green-400 hover:text-green-300 transition-colors">pradeeptraje@gmail.com</a>
+            </p>
+            <p className="text-gray-400">
+              📱 <span className="text-blue-400">+1 (922) 632-5101</span>
+            </p>
           </div>
 
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 max-w-2xl mx-auto">
             <div className="text-center">
-              <div className="text-3xl font-bold text-green-400 neon-glow">500+</div>
-              <div className="text-gray-400 text-sm">Microservices Deployed</div>
+              <div className="text-3xl font-bold text-green-400 neon-glow">135+</div>
+              <div className="text-gray-400 text-sm">Landing Pages Built</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-blue-400 neon-glow">$1.2M</div>
+              <div className="text-3xl font-bold text-blue-400 neon-glow">40%</div>
+              <div className="text-gray-400 text-sm">Deployment Time Reduced</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-purple-400 neon-glow">$12K</div>
               <div className="text-gray-400 text-sm">Annual Cost Savings</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-purple-400 neon-glow">99.9%</div>
-              <div className="text-gray-400 text-sm">Uptime Achieved</div>
             </div>
           </div>
         </div>

@@ -5,60 +5,48 @@ import { Calendar, MapPin, TrendingUp } from 'lucide-react';
 const CareerTimeline = () => {
   const experiences = [
     {
-      title: "Senior DevOps Engineer",
-      company: "Current Company",
-      duration: "2022 - Present",
-      location: "Remote",
+      title: "DevOps Engineer & Senior UI/UX Developer",
+      company: "TechExped Technology Services Pvt Ltd | Everfi from Blackbaud.inc",
+      duration: "April 2022 - Present",
+      location: "Washington, United States",
       achievements: [
-        "Built zero-downtime deployment system for 500+ microservices",
-        "Implemented GitOps workflows reducing deployment time by 75%",
-        "Led migration to Kubernetes achieving 99.9% uptime",
-        "Established infrastructure security standards and compliance"
+        "Designed multi-stage CI/CD pipelines with GitHub, Jenkins, SonarQube, reducing manual errors by 30%",
+        "Implemented scalable cloud infrastructure using Terraform, cutting monthly costs by 10%",
+        "Dockerized applications and orchestrated K8s deployments, reducing deployment times by 25%",
+        "Established monitoring with Prometheus/Grafana, reducing incident response times by 35%",
+        "Delivered 100+ responsive web templates from Figma designs, improving turnaround by 30%",
+        "Spearheaded ADA compliance initiatives for 15+ client websites achieving 100% accessibility"
       ],
-      technologies: ["Kubernetes", "AWS", "Terraform", "ArgoCD", "Prometheus"],
+      technologies: ["AWS", "Docker", "Kubernetes", "Jenkins", "Terraform", "Prometheus", "Grafana", "HTML5", "CSS3", "React"],
       color: "border-green-500"
     },
     {
-      title: "Cloud Infrastructure Engineer",
-      company: "Previous Company",
-      duration: "2020 - 2022",
-      location: "Hybrid",
+      title: "Online Content Moderator",
+      company: "Accenture in India",
+      duration: "February 2022 - May 2022",
+      location: "Mumbai, Maharashtra, India",
       achievements: [
-        "Migrated on-premises legacy systems to AWS saving $1.2M/year",
-        "Designed and implemented multi-region disaster recovery",
-        "Automated infrastructure provisioning reducing manual effort by 90%",
-        "Optimized cloud costs through right-sizing and reserved instances"
+        "Moderated 500+ daily social media posts with 99.9% compliance accuracy",
+        "Flagged and resolved 1,200+ policy violations within SLA deadlines",
+        "Automated repetitive tasks using AutoHotkey macros, reducing review time by 20%",
+        "Collaborated on UI improvements for internal moderation tools"
       ],
-      technologies: ["AWS", "Terraform", "Jenkins", "Docker", "Ansible"],
+      technologies: ["AutoHotkey", "Content Moderation", "Process Automation", "UI/UX"],
       color: "border-blue-500"
     },
     {
-      title: "DevOps Engineer",
-      company: "Tech Startup",
-      duration: "2018 - 2020",
-      location: "On-site",
+      title: "Trader | Trainer | Associate Partner",
+      company: "Profitmart Securities Pvt. Ltd.",
+      duration: "June 2018 - February 2022",
+      location: "Kolhapur, Maharashtra, India",
       achievements: [
-        "Established CI/CD pipelines from scratch using Jenkins",
-        "Containerized applications reducing deployment complexity",
-        "Implemented monitoring and alerting with Prometheus/Grafana",
-        "Created infrastructure as code practices"
+        "Developed 20+ AutoHotkey v1 scripts for trade automation, boosting profits by 18%+ monthly",
+        "Integrated utilities with AWS EC2, saving 50% of cloud runtime costs annually",
+        "Designed front-end interfaces using HTML5, CSS3, Bootstrap for real-time trading data",
+        "Streamlined REST API integrations improving data flow between algorithms and UI dashboards"
       ],
-      technologies: ["Jenkins", "Docker", "AWS", "Monitoring", "Scripting"],
+      technologies: ["AutoHotkey", "AWS EC2", "HTML5", "CSS3", "Bootstrap", "REST APIs"],
       color: "border-purple-500"
-    },
-    {
-      title: "Systems Administrator",
-      company: "Enterprise Corp",
-      duration: "2016 - 2018",
-      location: "On-site",
-      achievements: [
-        "Managed Linux/Windows server infrastructure",
-        "Automated routine maintenance tasks with Shell/PowerShell",
-        "Implemented backup and disaster recovery procedures",
-        "Maintained 99.5% system uptime across all environments"
-      ],
-      technologies: ["Linux", "Windows", "VMware", "Networking", "Scripting"],
-      color: "border-cyan-500"
     }
   ];
 
@@ -70,7 +58,7 @@ const CareerTimeline = () => {
             Career Journey
           </h2>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto font-sans">
-            A progression through infrastructure evolution, from traditional systems to cloud-native architectures
+            5+ years of experience bridging DevOps automation with UI/UX development
           </p>
         </div>
 
