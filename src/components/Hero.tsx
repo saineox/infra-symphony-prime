@@ -62,7 +62,7 @@ const Hero = () => {
             <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-transparent bg-gradient-to-br from-green-400 via-blue-400 to-purple-400 p-1 shadow-lg hover:shadow-xl transition-all duration-300">
               <div className="w-full h-full rounded-full overflow-hidden bg-black">
                 <img 
-                  src="/lovable-uploads/90fe6038-dfe0-4b06-ba98-dfe4b71bb839.png" 
+                  src="/lovable-uploads/4e18bbe6-9029-4a52-b8bf-99c5281549ba.png" 
                   alt="Pradeep Kadam Profile Picture"
                   className="w-full h-full rounded-full object-cover"
                   onError={(e) => {
