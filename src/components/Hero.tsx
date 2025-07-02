@@ -59,12 +59,18 @@ const Hero = () => {
 
           {/* Profile Picture */}
           <div className="flex justify-center mb-8">
-            <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-gradient-to-r from-green-400 to-blue-400 p-1 bg-gradient-to-r from-green-400 to-blue-400">
-              <img 
-                src="/lovable-uploads/90fe6038-dfe0-4b06-ba98-dfe4b71bb839.png" 
-                alt="Pradeep Kadam Profile Picture"
-                className="w-full h-full rounded-full object-cover"
-              />
+            <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-transparent bg-gradient-to-br from-green-400 via-blue-400 to-purple-400 p-1 shadow-lg hover:shadow-xl transition-all duration-300">
+              <div className="w-full h-full rounded-full overflow-hidden bg-black">
+                <img 
+                  src="/lovable-uploads/90fe6038-dfe0-4b06-ba98-dfe4b71bb839.png" 
+                  alt="Pradeep Kadam Profile Picture"
+                  className="w-full h-full rounded-full object-cover"
+                  onError={(e) => {
+                    console.log('Image failed to load');
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
+              </div>
             </div>
           </div>
 

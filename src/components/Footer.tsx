@@ -17,7 +17,7 @@ const Footer = () => {
           </div>
           
           <p className="text-gray-500 text-sm mb-4 font-sans">
-            © 2024 Pradeep Kadam. Automating infrastructure, one deployment at a time.
+            © {new Date().getFullYear()} Pradeep Kadam. Automating infrastructure, one deployment at a time.
           </p>
           
           <div className="flex items-center justify-center space-x-6 text-sm mb-4">
@@ -38,7 +38,7 @@ const Footer = () => {
             </a>
             <span className="text-gray-600">•</span>
             <span className="text-gray-400 font-sans">
-              📱 +1 (922) 632-5101
+              📱 +91 9226325101
             </span>
           </div>
           

@@ -24,15 +24,16 @@ const Navigation = () => {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-sm border-b border-green-500/30">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-md border-b border-gradient-to-r from-green-500/40 via-blue-500/40 to-purple-500/40 shadow-lg">
       <div className="container mx-auto px-6">
         <div className="flex items-center justify-between h-16">
           {/* Logo/Brand */}
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-blue-400 rounded-lg flex items-center justify-center">
+          <div className="flex items-center space-x-3">
+            <div className="relative w-10 h-10 bg-gradient-to-br from-green-400 via-blue-400 to-purple-400 rounded-xl flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
               <span className="text-black font-bold text-sm">PK</span>
+              <div className="absolute inset-0 bg-gradient-to-br from-green-400/20 to-purple-400/20 rounded-xl animate-pulse"></div>
             </div>
-            <span className="text-white font-semibold hidden sm:block">Pradeep Kadam</span>
+            <span className="text-white font-semibold hidden sm:block bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent">Pradeep Kadam</span>
           </div>
 
           {/* Desktop Navigation */}
@@ -41,9 +42,10 @@ const Navigation = () => {
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
-                className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm font-medium"
+                className="relative text-gray-300 hover:text-green-400 transition-all duration-300 text-sm font-medium group"
               >
-                {item.label}
+                <span className="relative z-10">{item.label}</span>
+                <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-green-400 to-blue-400 group-hover:w-full transition-all duration-300"></div>
               </button>
             ))}
           </div>
@@ -54,7 +56,7 @@ const Navigation = () => {
               href="https://github.com/saineox"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-400 hover:text-white transition-colors"
+              className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-all duration-300 hover:scale-110"
             >
               <Github className="w-5 h-5" />
             </a>
@@ -62,13 +64,13 @@ const Navigation = () => {
               href="https://www.linkedin.com/in/pradeeptraje/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-400 hover:text-blue-400 transition-colors"
+              className="p-2 rounded-lg text-gray-400 hover:text-blue-400 hover:bg-blue-400/10 transition-all duration-300 hover:scale-110"
             >
               <Linkedin className="w-5 h-5" />
             </a>
             <a
               href="mailto:pradeeptraje@gmail.com"
-              className="text-gray-400 hover:text-green-400 transition-colors"
+              className="p-2 rounded-lg text-gray-400 hover:text-green-400 hover:bg-green-400/10 transition-all duration-300 hover:scale-110"
             >
               <Mail className="w-5 h-5" />
             </a>
@@ -77,7 +79,7 @@ const Navigation = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden text-white p-2"
+            className="md:hidden text-white p-2 rounded-lg hover:bg-white/10 transition-all duration-300"
           >
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
