@@ -51,7 +51,7 @@ const Navigation = () => {
           {/* Social Links */}
           <div className="hidden md:flex items-center space-x-4">
             <a
-              href="https://github.com/pradeeptraje"
+              href="https://github.com/saineox"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-400 hover:text-white transition-colors"
@@ -98,7 +98,7 @@ const Navigation = () => {
               ))}
               <div className="flex items-center justify-center space-x-6 pt-4 border-t border-gray-700">
                 <a
-                  href="https://github.com/pradeeptraje"
+                  href="https://github.com/saineox"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-400 hover:text-white transition-colors"

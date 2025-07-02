@@ -57,6 +57,17 @@ const Hero = () => {
             )}
           </div>
 
+          {/* Profile Picture */}
+          <div className="flex justify-center mb-8">
+            <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-gradient-to-r from-green-400 to-blue-400 p-1 bg-gradient-to-r from-green-400 to-blue-400">
+              <img 
+                src="/lovable-uploads/90fe6038-dfe0-4b06-ba98-dfe4b71bb839.png" 
+                alt="Pradeep Kadam Profile Picture"
+                className="w-full h-full rounded-full object-cover"
+              />
+            </div>
+          </div>
+
           {/* Main heading */}
           <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-green-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
             Pradeep Kadam
@@ -110,7 +121,7 @@ const Hero = () => {
               📧 <a href="mailto:pradeeptraje@gmail.com" className="text-green-400 hover:text-green-300 transition-colors">pradeeptraje@gmail.com</a>
             </p>
             <p className="text-gray-400">
-              📱 <span className="text-blue-400">+1 (922) 632-5101</span>
+              📱 <span className="text-blue-400">+91 9226325101</span>
             </p>
           </div>
 
@@ -121,7 +132,7 @@ const Hero = () => {
               <div className="text-gray-400 text-sm">GitHub Contributor</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-green-400 neon-glow">135+</div>
+              <div className="text-3xl font-bold text-green-400 neon-glow">205+</div>
               <div className="text-gray-400 text-sm">Landing Pages Built</div>
             </div>
             <div className="text-center">

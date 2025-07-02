@@ -35,9 +35,9 @@ const ContactTerminal = () => {
     },
     'contact --phone': () => {
       // Copy phone to clipboard  
-      navigator.clipboard.writeText('+1 (922) 632-5101');
+      navigator.clipboard.writeText('+91 9226325101');
       return [
-        { type: 'success', text: '📱 Phone: +1 (922) 632-5101' },
+        { type: 'success', text: '📱 Phone: +91 9226325101' },
         { type: 'output', text: 'Phone number copied to clipboard!' }
       ];
     },
@@ -46,7 +46,7 @@ const ContactTerminal = () => {
       return [{ type: 'success', text: '🔗 Opening LinkedIn profile...' }];
     },
     'contact --github': () => {
-      window.open('https://github.com/pradeeptraje', '_blank');
+      window.open('https://github.com/saineox', '_blank');
       return [{ type: 'success', text: '🐙 Opening GitHub profile...' }];
     },
     'download --resume': () => [
