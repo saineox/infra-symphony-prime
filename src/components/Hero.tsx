@@ -5,6 +5,8 @@ import { Terminal, Code, Server, GitBranch, Star, Users, Trophy } from 'lucide-r
 const Hero = () => {
   const [typedText, setTypedText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
   const fullText = 'deploy --profile "Pradeep Kadam: DevOps Engineer & UI/UX Developer"';
 
   useEffect(() => {
@@ -16,6 +18,17 @@ const Hero = () => {
       return () => clearTimeout(timeout);
     }
   }, [currentIndex, fullText]);
+
+  const handleImageLoad = () => {
+    setImageLoaded(true);
+    setImageError(false);
+  };
+
+  const handleImageError = () => {
+    console.log('Profile image failed to load, using fallback');
+    setImageError(true);
+    setImageLoaded(false);
+  };
 
   return (
     <section className="min-h-screen flex items-center justify-center relative overflow-hidden">
@@ -60,16 +73,22 @@ const Hero = () => {
           {/* Profile Picture */}
           <div className="flex justify-center mb-8">
             <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-transparent bg-gradient-to-br from-green-400 via-blue-400 to-purple-400 p-1 shadow-lg hover:shadow-xl transition-all duration-300">
-              <div className="w-full h-full rounded-full overflow-hidden bg-black">
-                <img 
-                  src="/lovable-uploads/4e18bbe6-9029-4a52-b8bf-99c5281549ba.png" 
-                  alt="Pradeep Kadam Profile Picture"
-                  className="w-full h-full rounded-full object-cover"
-                  onError={(e) => {
-                    console.log('Image failed to load');
-                    e.currentTarget.style.display = 'none';
-                  }}
-                />
+              <div className="w-full h-full rounded-full overflow-hidden bg-gray-800 flex items-center justify-center">
+                {!imageError ? (
+                  <img 
+                    src="/lovable-uploads/4e18bbe6-9029-4a52-b8bf-99c5281549ba.png" 
+                    alt="Pradeep Kadam Profile Picture"
+                    className="w-full h-full rounded-full object-cover"
+                    onLoad={handleImageLoad}
+                    onError={handleImageError}
+                    style={{ display: imageLoaded ? 'block' : 'none' }}
+                  />
+                ) : null}
+                {(imageError || !imageLoaded) && (
+                  <div className="w-full h-full rounded-full bg-gradient-to-br from-green-500 to-blue-500 flex items-center justify-center text-white text-2xl font-bold">
+                    PK
+                  </div>
+                )}
               </div>
             </div>
           </div>
