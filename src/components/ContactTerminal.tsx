@@ -1,16 +1,117 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Mail, Linkedin, Github, Download, Phone, Home, Server, Code, User, Briefcase, MessageSquare } from 'lucide-react';
 
+interface OutputLine {
+  type: string;
+  text: string;
+  id: string;
+  isComplete?: boolean;
+}
+
 const ContactTerminal = () => {
   const [input, setInput] = useState('');
-  const [output, setOutput] = useState([
-    { type: 'system', text: 'Welcome to Pradeep Kadam DevOps Terminal v2.1.0' },
-    { type: 'system', text: 'Type "help" for available commands' },
-    { type: 'prompt', text: 'pradeep@contact:~$' }
+  const [output, setOutput] = useState<OutputLine[]>([
+    { type: 'system', text: 'Welcome to Pradeep Kadam DevOps Terminal v2.1.0', id: '1', isComplete: true },
+    { type: 'system', text: 'Type "help" for available commands', id: '2', isComplete: true },
+    { type: 'prompt', text: 'pradeep@contact:~$', id: '3', isComplete: true }
   ]);
   const [isTyping, setIsTyping] = useState(false);
+  const [typingQueue, setTypingQueue] = useState<OutputLine[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+
+  // Initialize audio context
+  useEffect(() => {
+    const initAudio = () => {
+      if (!audioContextRef.current) {
+        audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+      }
+    };
+    
+    // Initialize on first user interaction
+    const handleFirstInteraction = () => {
+      initAudio();
+      document.removeEventListener('click', handleFirstInteraction);
+    };
+    
+    document.addEventListener('click', handleFirstInteraction);
+    
+    return () => {
+      document.removeEventListener('click', handleFirstInteraction);
+      if (audioContextRef.current) {
+        audioContextRef.current.close();
+      }
+    };
+  }, []);
+
+  // Create typing sound effect
+  const playTypingSound = () => {
+    if (!audioContextRef.current) return;
+    
+    try {
+      const oscillator = audioContextRef.current.createOscillator();
+      const gainNode = audioContextRef.current.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContextRef.current.destination);
+      
+      oscillator.frequency.setValueAtTime(800 + Math.random() * 200, audioContextRef.current.currentTime);
+      oscillator.type = 'square';
+      
+      gainNode.gain.setValueAtTime(0.1, audioContextRef.current.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContextRef.current.currentTime + 0.1);
+      
+      oscillator.start();
+      oscillator.stop(audioContextRef.current.currentTime + 0.1);
+    } catch (error) {
+      // Silently handle audio errors
+    }
+  };
+
+  // Typing animation effect
+  const typeText = (text: string, onComplete: () => void) => {
+    let currentIndex = 0;
+    const typingSpeed = 30 + Math.random() * 20; // Variable speed for realism
+    
+    const typeNextChar = () => {
+      if (currentIndex < text.length) {
+        playTypingSound();
+        currentIndex++;
+        setTimeout(typeNextChar, typingSpeed);
+      } else {
+        onComplete();
+      }
+    };
+    
+    typeNextChar();
+  };
+
+  // Process typing queue
+  useEffect(() => {
+    if (typingQueue.length > 0 && !isTyping) {
+      setIsTyping(true);
+      const nextLine = typingQueue[0];
+      
+      // Add the line to output immediately but mark as incomplete
+      setOutput(prev => [...prev, { ...nextLine, isComplete: false }]);
+      
+      // Start typing animation
+      typeText(nextLine.text, () => {
+        // Mark as complete
+        setOutput(prev => 
+          prev.map(line => 
+            line.id === nextLine.id ? { ...line, isComplete: true } : line
+          )
+        );
+        
+        // Remove from queue and continue
+        setTypingQueue(prev => prev.slice(1));
+        setIsTyping(false);
+      });
+    }
+  }, [typingQueue, isTyping]);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -38,7 +139,6 @@ const ContactTerminal = () => {
       { type: 'output', text: '  whoami             - About me' }
     ],
     'contact --email': () => {
-      // Copy email to clipboard
       navigator.clipboard.writeText('pradeeptraje@gmail.com');
       return [
         { type: 'success', text: '📧 Email: pradeeptraje@gmail.com' },
@@ -46,7 +146,6 @@ const ContactTerminal = () => {
       ];
     },
     'contact --phone': () => {
-      // Copy phone to clipboard  
       navigator.clipboard.writeText('+91 9226325101');
       return [
         { type: 'success', text: '📱 Phone: +91 9226325101' },
@@ -107,53 +206,74 @@ const ContactTerminal = () => {
     ],
     clear: () => {
       setOutput([
-        { type: 'system', text: 'Terminal cleared' },
-        { type: 'prompt', text: 'pradeep@contact:~$' }
+        { type: 'system', text: 'Terminal cleared', id: Date.now().toString(), isComplete: true },
+        { type: 'prompt', text: 'pradeep@contact:~$', id: (Date.now() + 1).toString(), isComplete: true }
       ]);
+      setTypingQueue([]);
       return [];
     }
   };
 
   const executeCommand = (command: string) => {
-    setIsTyping(true);
     const newOutput = [...output];
     
-    // Add user input
-    newOutput.push({ type: 'input', text: `$ ${command}` });
+    // Add user input immediately
+    newOutput.push({ 
+      type: 'input', 
+      text: `$ ${command}`, 
+      id: Date.now().toString(),
+      isComplete: true 
+    });
+    setOutput(newOutput);
 
     // Process command
     const cmd = command.toLowerCase().trim();
+    let result: any[] = [];
+    
     if (commands[cmd as keyof typeof commands]) {
-      const result = commands[cmd as keyof typeof commands]();
-      if (result.length > 0) {
-        newOutput.push(...result);
-      }
+      result = commands[cmd as keyof typeof commands]();
     } else {
-      newOutput.push({ 
+      result = [{ 
         type: 'error', 
         text: `Command not found: ${command}. Type "help" for available commands.` 
+      }];
+    }
+
+    // Add results to typing queue if not clear command
+    if (cmd !== 'clear' && result.length > 0) {
+      const typingLines = result.map((line, index) => ({
+        ...line,
+        id: (Date.now() + index + 2).toString()
+      }));
+      
+      // Add prompt at the end
+      typingLines.push({
+        type: 'prompt',
+        text: 'pradeep@contact:~$',
+        id: (Date.now() + result.length + 2).toString()
       });
+      
+      setTypingQueue(prev => [...prev, ...typingLines]);
+    } else if (cmd !== 'clear') {
+      // Add prompt for commands with no output
+      setTypingQueue(prev => [...prev, {
+        type: 'prompt',
+        text: 'pradeep@contact:~$',
+        id: (Date.now() + 2).toString()
+      }]);
     }
 
-    // Add new prompt
-    if (cmd !== 'clear') {
-      newOutput.push({ type: 'prompt', text: 'pradeep@contact:~$' });
-    }
-
-    setTimeout(() => {
-      setOutput(newOutput);
-      setInput('');
-      setIsTyping(false);
-    }, 500);
+    setInput('');
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim()) return;
+    if (!input.trim() || isTyping) return;
     executeCommand(input);
   };
 
   const handleQuickButton = (command: string) => {
+    if (isTyping) return;
     setInput(command);
     executeCommand(command);
   };
@@ -174,6 +294,37 @@ const ContactTerminal = () => {
       case 'error': return 'text-red-400';
       default: return 'text-gray-300';
     }
+  };
+
+  // Component for animated text
+  const AnimatedText = ({ text, isComplete, className }: { text: string; isComplete?: boolean; className: string }) => {
+    const [displayText, setDisplayText] = useState('');
+    
+    useEffect(() => {
+      if (isComplete) {
+        setDisplayText(text);
+      } else {
+        setDisplayText('');
+      }
+    }, [text, isComplete]);
+
+    useEffect(() => {
+      if (!isComplete && displayText.length < text.length) {
+        const timer = setTimeout(() => {
+          setDisplayText(text.slice(0, displayText.length + 1));
+        }, 30 + Math.random() * 20);
+        return () => clearTimeout(timer);
+      }
+    }, [displayText, text, isComplete]);
+
+    return (
+      <div className={className}>
+        {displayText}
+        {!isComplete && displayText.length < text.length && (
+          <span className="terminal-cursor inline-block w-2 h-4 bg-green-400 ml-1 animate-pulse"></span>
+        )}
+      </div>
+    );
   };
 
   const navigationButtons = [
@@ -219,16 +370,14 @@ const ContactTerminal = () => {
               className="h-96 overflow-y-auto mb-4 space-y-1"
               onClick={() => inputRef.current?.focus()}
             >
-              {output.map((line, index) => (
-                <div key={index} className={`${getTextColor(line.type)} font-mono text-sm leading-relaxed`}>
-                  {line.text}
-                </div>
+              {output.map((line) => (
+                <AnimatedText
+                  key={line.id}
+                  text={line.text}
+                  isComplete={line.isComplete}
+                  className={`${getTextColor(line.type)} font-mono text-sm leading-relaxed`}
+                />
               ))}
-              {isTyping && (
-                <div className="text-gray-400 font-mono text-sm animate-pulse">
-                  Processing command...
-                </div>
-              )}
             </div>
 
             <form onSubmit={handleSubmit} className="flex items-center">
@@ -238,8 +387,9 @@ const ContactTerminal = () => {
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                className="flex-1 bg-transparent text-white font-mono text-sm outline-none"
-                placeholder="Type a command or click buttons below..."
+                disabled={isTyping}
+                className="flex-1 bg-transparent text-white font-mono text-sm outline-none disabled:opacity-50"
+                placeholder={isTyping ? "Processing..." : "Type a command or click buttons below..."}
                 autoFocus
               />
               <span className="terminal-cursor ml-1"></span>
@@ -254,7 +404,8 @@ const ContactTerminal = () => {
                 <button 
                   key={btn.command}
                   onClick={() => handleQuickButton(btn.command)}
-                  className={`flex items-center justify-center px-3 py-2 bg-black/50 border border-gray-700 rounded-lg hover:border-${btn.color}-400 transition-all duration-300 group hover:scale-105`}
+                  disabled={isTyping}
+                  className={`flex items-center justify-center px-3 py-2 bg-black/50 border border-gray-700 rounded-lg hover:border-${btn.color}-400 transition-all duration-300 group hover:scale-105 disabled:opacity-50 disabled:hover:scale-100`}
                 >
                   <btn.icon className={`w-4 h-4 text-${btn.color}-400 mr-2 group-hover:animate-bounce`} />
                   <span className="text-gray-300 font-sans text-sm">{btn.label}</span>
@@ -271,7 +422,8 @@ const ContactTerminal = () => {
                 <button 
                   key={btn.command}
                   onClick={() => handleQuickButton(btn.command)}
-                  className={`flex items-center justify-center px-4 py-3 bg-black/50 border border-gray-700 rounded-lg hover:border-${btn.color}-400 transition-all duration-300 group hover:scale-105`}
+                  disabled={isTyping}
+                  className={`flex items-center justify-center px-4 py-3 bg-black/50 border border-gray-700 rounded-lg hover:border-${btn.color}-400 transition-all duration-300 group hover:scale-105 disabled:opacity-50 disabled:hover:scale-100`}
                 >
                   <btn.icon className={`w-5 h-5 text-${btn.color}-400 mr-2 group-hover:animate-bounce`} />
                   <span className="text-gray-300 font-sans">{btn.label}</span>
