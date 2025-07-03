@@ -76,7 +76,7 @@ const Hero = () => {
               <div className="w-full h-full rounded-full overflow-hidden bg-gray-800 flex items-center justify-center">
                 {!imageError ? (
                   <img 
-                    src="/lovable-uploads/4e18bbe6-9029-4a52-b8bf-99c5281549ba.png" 
+                    src="/lovable-uploads/417ac179-2146-4012-9a7b-05b995ed74c3.png" 
                     alt="Pradeep Kadam Profile Picture"
                     className="w-full h-full rounded-full object-cover"
                     onLoad={handleImageLoad}
