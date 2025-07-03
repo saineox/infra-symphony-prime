@@ -20,15 +20,33 @@ const Hero = () => {
   }, [currentIndex, fullText]);
 
   const handleImageLoad = () => {
+    console.log('Profile image loaded successfully');
     setImageLoaded(true);
     setImageError(false);
   };
 
-  const handleImageError = () => {
-    console.log('Profile image failed to load, using fallback');
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    console.log('Profile image failed to load:', e.currentTarget.src);
+    console.log('Attempting to load fallback or using initials');
     setImageError(true);
     setImageLoaded(false);
   };
+
+  // Check if image exists by trying to load it
+  useEffect(() => {
+    const img = new Image();
+    img.onload = () => {
+      console.log('Image preload successful');
+      setImageLoaded(true);
+      setImageError(false);
+    };
+    img.onerror = () => {
+      console.log('Image preload failed');
+      setImageError(true);
+      setImageLoaded(false);
+    };
+    img.src = '/lovable-uploads/417ac179-2146-4012-9a7b-05b995ed74c3.png';
+  }, []);
 
   return (
     <section className="min-h-screen flex items-center justify-center relative overflow-hidden">
@@ -81,9 +99,10 @@ const Hero = () => {
                     className="w-full h-full rounded-full object-cover"
                     onLoad={handleImageLoad}
                     onError={handleImageError}
-                    style={{ display: imageLoaded ? 'block' : 'none' }}
+                    style={{ display: imageLoaded && !imageError ? 'block' : 'none' }}
                   />
                 ) : null}
+                {/* Fallback with initials - always show if image fails or hasn't loaded */}
                 {(imageError || !imageLoaded) && (
                   <div className="w-full h-full rounded-full bg-gradient-to-br from-green-500 to-blue-500 flex items-center justify-center text-white text-2xl font-bold">
                     PK
