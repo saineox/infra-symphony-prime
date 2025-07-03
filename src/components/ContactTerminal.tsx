@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect, useRef } from 'react';
-import { Mail, Linkedin, Github, Download, Phone } from 'lucide-react';
+import { Mail, Linkedin, Github, Download, Phone, Home, Server, Code, User, Briefcase, MessageSquare } from 'lucide-react';
 
 const ContactTerminal = () => {
   const [input, setInput] = useState('');
@@ -13,6 +12,13 @@ const ContactTerminal = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
 
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   const commands = {
     help: () => [
       { type: 'output', text: 'Available commands:' },
@@ -21,6 +27,12 @@ const ContactTerminal = () => {
       { type: 'output', text: '  contact --linkedin  - Open LinkedIn profile' },
       { type: 'output', text: '  contact --github    - Open GitHub profile' },
       { type: 'output', text: '  download --resume   - Download resume' },
+      { type: 'output', text: '  navigate --home     - Go to home section' },
+      { type: 'output', text: '  navigate --devops   - Go to DevOps section' },
+      { type: 'output', text: '  navigate --skills   - Go to skills section' },
+      { type: 'output', text: '  navigate --projects - Go to projects section' },
+      { type: 'output', text: '  navigate --testimonials - Go to testimonials section' },
+      { type: 'output', text: '  navigate --experience - Go to experience section' },
       { type: 'output', text: '  status             - Show current status' },
       { type: 'output', text: '  clear              - Clear terminal' },
       { type: 'output', text: '  whoami             - About me' }
@@ -53,6 +65,30 @@ const ContactTerminal = () => {
       { type: 'success', text: '📄 Downloading resume...' },
       { type: 'output', text: 'Resume.pdf downloaded successfully!' }
     ],
+    'navigate --home': () => {
+      scrollToSection('hero');
+      return [{ type: 'success', text: '🏠 Navigating to home section...' }];
+    },
+    'navigate --devops': () => {
+      scrollToSection('devops-philosophy');
+      return [{ type: 'success', text: '⚙️ Navigating to DevOps philosophy section...' }];
+    },
+    'navigate --skills': () => {
+      scrollToSection('technical-arsenal');
+      return [{ type: 'success', text: '🛠️ Navigating to skills section...' }];
+    },
+    'navigate --projects': () => {
+      scrollToSection('project-showcase');
+      return [{ type: 'success', text: '📁 Navigating to projects section...' }];
+    },
+    'navigate --testimonials': () => {
+      scrollToSection('testimonials');
+      return [{ type: 'success', text: '💬 Navigating to testimonials section...' }];
+    },
+    'navigate --experience': () => {
+      scrollToSection('career-timeline');
+      return [{ type: 'success', text: '📈 Navigating to experience section...' }];
+    },
     status: () => [
       { type: 'success', text: '✅ DevOps Status: OPERATIONAL' },
       { type: 'success', text: '✅ Available for new opportunities' },
@@ -140,6 +176,23 @@ const ContactTerminal = () => {
     }
   };
 
+  const navigationButtons = [
+    { command: 'navigate --home', icon: Home, label: 'Home', color: 'green' },
+    { command: 'navigate --devops', icon: Server, label: 'DevOps', color: 'blue' },
+    { command: 'navigate --skills', icon: Code, label: 'Skills', color: 'purple' },
+    { command: 'navigate --projects', icon: Briefcase, label: 'Projects', color: 'cyan' },
+    { command: 'navigate --testimonials', icon: MessageSquare, label: 'Testimonials', color: 'yellow' },
+    { command: 'navigate --experience', icon: User, label: 'Experience', color: 'pink' }
+  ];
+
+  const contactButtons = [
+    { command: 'contact --email', icon: Mail, label: 'Email', color: 'green' },
+    { command: 'contact --phone', icon: Phone, label: 'Phone', color: 'yellow' },
+    { command: 'contact --linkedin', icon: Linkedin, label: 'LinkedIn', color: 'blue' },
+    { command: 'contact --github', icon: Github, label: 'GitHub', color: 'purple' },
+    { command: 'download --resume', icon: Download, label: 'Resume', color: 'cyan' }
+  ];
+
   return (
     <section className="py-20">
       <div className="container mx-auto px-6">
@@ -148,7 +201,7 @@ const ContactTerminal = () => {
             Contact Terminal
           </h2>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto font-sans">
-            Interactive CLI interface for getting in touch. Click the buttons below for instant contact actions.
+            Interactive CLI interface for getting in touch and navigating the portfolio. Click the buttons below for instant actions.
           </p>
         </div>
 
@@ -193,47 +246,38 @@ const ContactTerminal = () => {
             </form>
           </div>
 
-          {/* Quick contact buttons with auto-execution */}
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mt-8">
-            <button 
-              onClick={() => handleQuickButton('contact --email')}
-              className="flex items-center justify-center px-4 py-3 bg-black/50 border border-gray-700 rounded-lg hover:border-green-400 transition-all duration-300 group hover:scale-105"
-            >
-              <Mail className="w-5 h-5 text-green-400 mr-2 group-hover:animate-bounce" />
-              <span className="text-gray-300 font-sans">Email</span>
-            </button>
-            
-            <button 
-              onClick={() => handleQuickButton('contact --phone')}
-              className="flex items-center justify-center px-4 py-3 bg-black/50 border border-gray-700 rounded-lg hover:border-yellow-400 transition-all duration-300 group hover:scale-105"
-            >
-              <Phone className="w-5 h-5 text-yellow-400 mr-2 group-hover:animate-bounce" />
-              <span className="text-gray-300 font-sans">Phone</span>
-            </button>
-            
-            <button 
-              onClick={() => handleQuickButton('contact --linkedin')}
-              className="flex items-center justify-center px-4 py-3 bg-black/50 border border-gray-700 rounded-lg hover:border-blue-400 transition-all duration-300 group hover:scale-105"
-            >
-              <Linkedin className="w-5 h-5 text-blue-400 mr-2 group-hover:animate-bounce" />
-              <span className="text-gray-300 font-sans">LinkedIn</span>
-            </button>
-            
-            <button 
-              onClick={() => handleQuickButton('contact --github')}
-              className="flex items-center justify-center px-4 py-3 bg-black/50 border border-gray-700 rounded-lg hover:border-purple-400 transition-all duration-300 group hover:scale-105"
-            >
-              <Github className="w-5 h-5 text-purple-400 mr-2 group-hover:animate-bounce" />
-              <span className="text-gray-300 font-sans">GitHub</span>
-            </button>
-            
-            <button 
-              onClick={() => handleQuickButton('download --resume')}
-              className="flex items-center justify-center px-4 py-3 bg-black/50 border border-gray-700 rounded-lg hover:border-cyan-400 transition-all duration-300 group hover:scale-105"
-            >
-              <Download className="w-5 h-5 text-cyan-400 mr-2 group-hover:animate-bounce" />
-              <span className="text-gray-300 font-sans">Resume</span>
-            </button>
+          {/* Navigation buttons */}
+          <div className="mb-6">
+            <h3 className="text-lg font-semibold text-gray-300 mb-4 text-center">Navigation</h3>
+            <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
+              {navigationButtons.map((btn) => (
+                <button 
+                  key={btn.command}
+                  onClick={() => handleQuickButton(btn.command)}
+                  className={`flex items-center justify-center px-3 py-2 bg-black/50 border border-gray-700 rounded-lg hover:border-${btn.color}-400 transition-all duration-300 group hover:scale-105`}
+                >
+                  <btn.icon className={`w-4 h-4 text-${btn.color}-400 mr-2 group-hover:animate-bounce`} />
+                  <span className="text-gray-300 font-sans text-sm">{btn.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Contact buttons */}
+          <div>
+            <h3 className="text-lg font-semibold text-gray-300 mb-4 text-center">Contact & Actions</h3>
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+              {contactButtons.map((btn) => (
+                <button 
+                  key={btn.command}
+                  onClick={() => handleQuickButton(btn.command)}
+                  className={`flex items-center justify-center px-4 py-3 bg-black/50 border border-gray-700 rounded-lg hover:border-${btn.color}-400 transition-all duration-300 group hover:scale-105`}
+                >
+                  <btn.icon className={`w-5 h-5 text-${btn.color}-400 mr-2 group-hover:animate-bounce`} />
+                  <span className="text-gray-300 font-sans">{btn.label}</span>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
