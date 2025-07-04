@@ -8,7 +8,11 @@ const Navigation = () => {
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      // Smooth scroll with better positioning
+      element.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
       setIsOpen(false);
     }
   };

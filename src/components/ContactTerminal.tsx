@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Mail, Linkedin, Github, Download, Phone, Home, Server, Code, User, Briefcase, MessageSquare } from 'lucide-react';
 
@@ -46,7 +47,7 @@ const ContactTerminal = () => {
     };
   }, []);
 
-  // Create smooth, noiseless typing sound effect
+  // Apple-like typing sound effect - more subtle and refined
   const playTypingSound = () => {
     if (!audioContextRef.current) return;
     
@@ -59,22 +60,22 @@ const ContactTerminal = () => {
       filter.connect(gainNode);
       gainNode.connect(audioContextRef.current.destination);
       
-      // Smooth sine wave for noiseless sound
-      oscillator.type = 'sine';
-      oscillator.frequency.setValueAtTime(440 + Math.random() * 100, audioContextRef.current.currentTime);
+      // Apple-like soft click sound
+      oscillator.type = 'triangle';
+      oscillator.frequency.setValueAtTime(800 + Math.random() * 200, audioContextRef.current.currentTime);
       
-      // Low-pass filter to make it smoother
+      // Gentle filtering for warmth
       filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(800, audioContextRef.current.currentTime);
-      filter.Q.setValueAtTime(1, audioContextRef.current.currentTime);
+      filter.frequency.setValueAtTime(1200, audioContextRef.current.currentTime);
+      filter.Q.setValueAtTime(0.5, audioContextRef.current.currentTime);
       
-      // Very gentle volume with smooth fade
+      // Apple-like volume envelope - very soft
       gainNode.gain.setValueAtTime(0, audioContextRef.current.currentTime);
-      gainNode.gain.linearRampToValueAtTime(0.02, audioContextRef.current.currentTime + 0.01);
-      gainNode.gain.exponentialRampToValueAtTime(0.001, audioContextRef.current.currentTime + 0.08);
+      gainNode.gain.linearRampToValueAtTime(0.008, audioContextRef.current.currentTime + 0.005);
+      gainNode.gain.exponentialRampToValueAtTime(0.001, audioContextRef.current.currentTime + 0.04);
       
       oscillator.start();
-      oscillator.stop(audioContextRef.current.currentTime + 0.08);
+      oscillator.stop(audioContextRef.current.currentTime + 0.04);
     } catch (error) {
       // Silently handle audio errors
     }
@@ -87,41 +88,39 @@ const ContactTerminal = () => {
     let actionIndex = 0;
     const executeNextAction = () => {
       if (actionIndex < actions.length) {
-        // Add human-like delay between actions
         setTimeout(() => {
           actions[actionIndex]();
           actionIndex++;
           executeNextAction();
-        }, 800 + Math.random() * 400); // 800-1200ms delay between actions
+        }, 600 + Math.random() * 200);
       }
     };
     
-    // Start executing actions after a brief pause
-    setTimeout(executeNextAction, 500);
+    setTimeout(executeNextAction, 300);
   };
 
-  // Typing animation effect with smoother timing
+  // Apple-like typing animation with more natural rhythm
   const typeText = (text: string, onComplete: () => void) => {
     let currentIndex = 0;
-    const baseSpeed = 40;
+    const baseSpeed = 35;
     
     const typeNextChar = () => {
       if (currentIndex < text.length) {
-        // Vary speed based on character type for more natural typing
         const char = text[currentIndex];
         let speed = baseSpeed;
         
-        if (char === ' ') speed = baseSpeed * 0.3; // Faster for spaces
-        else if (char === '.' || char === ',' || char === '!') speed = baseSpeed * 2; // Slower for punctuation
-        else if (Math.random() < 0.1) speed = baseSpeed * 1.8; // Occasional hesitation
-        else speed = baseSpeed + (Math.random() * 20 - 10); // Slight variation
+        // More natural typing rhythm like Apple products
+        if (char === ' ') speed = baseSpeed * 0.4;
+        else if (char === '.' || char === ',' || char === '!' || char === '?') speed = baseSpeed * 2.2;
+        else if (char === '\n') speed = baseSpeed * 1.5;
+        else if (Math.random() < 0.08) speed = baseSpeed * 2; // Occasional natural pause
+        else speed = baseSpeed + (Math.random() * 12 - 6);
         
         playTypingSound();
         currentIndex++;
         setTimeout(typeNextChar, speed);
       } else {
-        // Small pause before completing
-        setTimeout(onComplete, 150);
+        setTimeout(onComplete, 100);
       }
     };
     
@@ -162,7 +161,11 @@ const ContactTerminal = () => {
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      // Smooth scroll with Apple-like easing
+      element.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
     }
   };
 
@@ -220,7 +223,6 @@ const ContactTerminal = () => {
     },
     'download --resume': () => {
       const action = () => {
-        // Simulate download action
         console.log('Resume download initiated');
       };
       setPendingActions([action]);
@@ -396,7 +398,7 @@ const ContactTerminal = () => {
       if (!isComplete && displayText.length < text.length) {
         const timer = setTimeout(() => {
           setDisplayText(text.slice(0, displayText.length + 1));
-        }, 40 + Math.random() * 15);
+        }, 35 + Math.random() * 10);
         return () => clearTimeout(timer);
       }
     }, [displayText, text, isComplete]);
@@ -429,7 +431,7 @@ const ContactTerminal = () => {
   ];
 
   return (
-    <section className="py-20">
+    <section id="contact-terminal" className="py-20">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent">
@@ -441,7 +443,7 @@ const ContactTerminal = () => {
         </div>
 
         <div className="max-w-4xl mx-auto">
-          <div className="terminal">
+          <div className="terminal relative">
             <div className="terminal-header">
               <div className="terminal-dot bg-red-500"></div>
               <div className="terminal-dot bg-yellow-500"></div>
@@ -480,8 +482,8 @@ const ContactTerminal = () => {
             </form>
           </div>
 
-          {/* Navigation buttons */}
-          <div className="mb-6">
+          {/* Navigation buttons - now positioned below terminal and will scroll naturally */}
+          <div className="mt-8 mb-6">
             <h3 className="text-lg font-semibold text-gray-300 mb-4 text-center">Navigation</h3>
             <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
               {navigationButtons.map((btn) => (
@@ -498,7 +500,7 @@ const ContactTerminal = () => {
             </div>
           </div>
 
-          {/* Contact buttons */}
+          {/* Contact buttons - also positioned to scroll naturally */}
           <div>
             <h3 className="text-lg font-semibold text-gray-300 mb-4 text-center">Contact & Actions</h3>
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
