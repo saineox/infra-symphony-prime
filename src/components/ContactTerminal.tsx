@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Mail, Linkedin, Github, Download, Phone, Home, Server, Code, User, Briefcase, MessageSquare } from 'lucide-react';
 
@@ -21,6 +20,7 @@ const ContactTerminal = () => {
   const [pendingActions, setPendingActions] = useState<(() => void)[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
+  const terminalContainerRef = useRef<HTMLDivElement>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
 
   // Initialize audio context
@@ -158,15 +158,39 @@ const ContactTerminal = () => {
     }
   }, [typingQueue, isTyping, pendingActions]);
 
+  // Smooth scroll to terminal bottom
+  const scrollToTerminalBottom = () => {
+    if (terminalRef.current) {
+      terminalRef.current.scrollTo({
+        top: terminalRef.current.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  // Enhanced scroll to section with better positioning
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
-      // Smooth scroll with Apple-like easing
-      element.scrollIntoView({ 
-        behavior: 'smooth',
-        block: 'start'
+      // Calculate offset to account for fixed navigation
+      const navHeight = 80; // Approximate height of navigation
+      const elementPosition = element.offsetTop - navHeight;
+      
+      window.scrollTo({
+        top: elementPosition,
+        behavior: 'smooth'
       });
     }
+  };
+
+  // Keep terminal input focused and visible
+  const maintainTerminalFocus = () => {
+    setTimeout(() => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+        scrollToTerminalBottom();
+      }
+    }, 100);
   };
 
   const commands = {
@@ -190,6 +214,7 @@ const ContactTerminal = () => {
     'contact --email': () => {
       const action = () => {
         navigator.clipboard.writeText('pradeeptraje@gmail.com');
+        maintainTerminalFocus();
       };
       setPendingActions([action]);
       return [
@@ -200,6 +225,7 @@ const ContactTerminal = () => {
     'contact --phone': () => {
       const action = () => {
         navigator.clipboard.writeText('+91 9226325101');
+        maintainTerminalFocus();
       };
       setPendingActions([action]);
       return [
@@ -210,6 +236,7 @@ const ContactTerminal = () => {
     'contact --linkedin': () => {
       const action = () => {
         window.open('https://www.linkedin.com/in/pradeeptraje/', '_blank');
+        maintainTerminalFocus();
       };
       setPendingActions([action]);
       return [{ type: 'success', text: '🔗 Opening LinkedIn profile...' }];
@@ -217,6 +244,7 @@ const ContactTerminal = () => {
     'contact --github': () => {
       const action = () => {
         window.open('https://github.com/saineox', '_blank');
+        maintainTerminalFocus();
       };
       setPendingActions([action]);
       return [{ type: 'success', text: '🐙 Opening GitHub profile...' }];
@@ -224,6 +252,7 @@ const ContactTerminal = () => {
     'download --resume': () => {
       const action = () => {
         console.log('Resume download initiated');
+        maintainTerminalFocus();
       };
       setPendingActions([action]);
       return [
@@ -234,6 +263,7 @@ const ContactTerminal = () => {
     'navigate --home': () => {
       const action = () => {
         scrollToSection('hero');
+        maintainTerminalFocus();
       };
       setPendingActions([action]);
       return [{ type: 'success', text: '🏠 Navigating to home section...' }];
@@ -241,6 +271,7 @@ const ContactTerminal = () => {
     'navigate --devops': () => {
       const action = () => {
         scrollToSection('devops-philosophy');
+        maintainTerminalFocus();
       };
       setPendingActions([action]);
       return [{ type: 'success', text: '⚙️ Navigating to DevOps philosophy section...' }];
@@ -248,6 +279,7 @@ const ContactTerminal = () => {
     'navigate --skills': () => {
       const action = () => {
         scrollToSection('technical-arsenal');
+        maintainTerminalFocus();
       };
       setPendingActions([action]);
       return [{ type: 'success', text: '🛠️ Navigating to skills section...' }];
@@ -255,6 +287,7 @@ const ContactTerminal = () => {
     'navigate --projects': () => {
       const action = () => {
         scrollToSection('project-showcase');
+        maintainTerminalFocus();
       };
       setPendingActions([action]);
       return [{ type: 'success', text: '📁 Navigating to projects section...' }];
@@ -262,6 +295,7 @@ const ContactTerminal = () => {
     'navigate --testimonials': () => {
       const action = () => {
         scrollToSection('testimonials');
+        maintainTerminalFocus();
       };
       setPendingActions([action]);
       return [{ type: 'success', text: '💬 Navigating to testimonials section...' }];
@@ -269,6 +303,7 @@ const ContactTerminal = () => {
     'navigate --experience': () => {
       const action = () => {
         scrollToSection('career-timeline');
+        maintainTerminalFocus();
       };
       setPendingActions([action]);
       return [{ type: 'success', text: '📈 Navigating to experience section...' }];
@@ -296,14 +331,17 @@ const ContactTerminal = () => {
       ]);
       setTypingQueue([]);
       setPendingActions([]);
+      maintainTerminalFocus();
       return [];
     }
   };
 
   const executeCommand = (command: string) => {
+    // Prevent page jumping
+    event?.preventDefault();
+    
     const newOutput = [...output];
     
-    // Add user input immediately
     newOutput.push({ 
       type: 'input', 
       text: `$ ${command}`, 
@@ -312,7 +350,6 @@ const ContactTerminal = () => {
     });
     setOutput(newOutput);
 
-    // Process command
     const cmd = command.toLowerCase().trim();
     let result: any[] = [];
     
@@ -325,14 +362,12 @@ const ContactTerminal = () => {
       }];
     }
 
-    // Add results to typing queue if not clear command
     if (cmd !== 'clear' && result.length > 0) {
       const typingLines = result.map((line, index) => ({
         ...line,
         id: (Date.now() + index + 2).toString()
       }));
       
-      // Add prompt at the end
       typingLines.push({
         type: 'prompt',
         text: 'pradeep@contact:~$',
@@ -341,7 +376,6 @@ const ContactTerminal = () => {
       
       setTypingQueue(prev => [...prev, ...typingLines]);
     } else if (cmd !== 'clear') {
-      // Add prompt for commands with no output
       setTypingQueue(prev => [...prev, {
         type: 'prompt',
         text: 'pradeep@contact:~$',
@@ -350,6 +384,7 @@ const ContactTerminal = () => {
     }
 
     setInput('');
+    maintainTerminalFocus();
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -360,15 +395,25 @@ const ContactTerminal = () => {
 
   const handleQuickButton = (command: string) => {
     if (isTyping) return;
+    
+    // Prevent any scrolling behavior from the button click
+    event?.preventDefault();
+    
     setInput(command);
     executeCommand(command);
   };
 
+  // Auto-scroll to bottom when output changes, but maintain smooth scrolling
   useEffect(() => {
-    if (terminalRef.current) {
-      terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
-    }
+    scrollToTerminalBottom();
   }, [output]);
+
+  // Keep input focused
+  useEffect(() => {
+    if (inputRef.current && !isTyping) {
+      inputRef.current.focus();
+    }
+  }, [isTyping, output]);
 
   const getTextColor = (type: string) => {
     switch (type) {
@@ -442,7 +487,7 @@ const ContactTerminal = () => {
           </p>
         </div>
 
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-4xl mx-auto" ref={terminalContainerRef}>
           <div className="terminal relative">
             <div className="terminal-header">
               <div className="terminal-dot bg-red-500"></div>
@@ -453,8 +498,12 @@ const ContactTerminal = () => {
             
             <div 
               ref={terminalRef}
-              className="h-96 overflow-y-auto mb-4 space-y-1"
-              onClick={() => inputRef.current?.focus()}
+              className="h-96 overflow-y-auto mb-4 space-y-1 scroll-smooth"
+              onClick={() => {
+                inputRef.current?.focus();
+                // Prevent any unwanted scrolling on terminal click
+                event?.preventDefault();
+              }}
             >
               {output.map((line) => (
                 <AnimatedText
@@ -466,7 +515,7 @@ const ContactTerminal = () => {
               ))}
             </div>
 
-            <form onSubmit={handleSubmit} className="flex items-center">
+            <form onSubmit={handleSubmit} className="flex items-center sticky bottom-0 bg-black/95 py-2">
               <span className="text-blue-400 font-mono text-sm mr-2">pradeep@contact:~$</span>
               <input
                 ref={inputRef}
@@ -476,7 +525,8 @@ const ContactTerminal = () => {
                 disabled={isTyping}
                 className="flex-1 bg-transparent text-white font-mono text-sm outline-none disabled:opacity-50"
                 placeholder={isTyping ? "Processing..." : "Type a command or click buttons below..."}
-                autoFocus
+                autoComplete="off"
+                spellCheck="false"
               />
               <span className="terminal-cursor ml-1"></span>
             </form>
@@ -489,7 +539,10 @@ const ContactTerminal = () => {
               {navigationButtons.map((btn) => (
                 <button 
                   key={btn.command}
-                  onClick={() => handleQuickButton(btn.command)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleQuickButton(btn.command);
+                  }}
                   disabled={isTyping}
                   className={`flex items-center justify-center px-3 py-2 bg-black/50 border border-gray-700 rounded-lg hover:border-${btn.color}-400 transition-all duration-300 group hover:scale-105 disabled:opacity-50 disabled:hover:scale-100`}
                 >
@@ -507,7 +560,10 @@ const ContactTerminal = () => {
               {contactButtons.map((btn) => (
                 <button 
                   key={btn.command}
-                  onClick={() => handleQuickButton(btn.command)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleQuickButton(btn.command);
+                  }}
                   disabled={isTyping}
                   className={`flex items-center justify-center px-4 py-3 bg-black/50 border border-gray-700 rounded-lg hover:border-${btn.color}-400 transition-all duration-300 group hover:scale-105 disabled:opacity-50 disabled:hover:scale-100`}
                 >
