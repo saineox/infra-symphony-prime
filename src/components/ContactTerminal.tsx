@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Mail, Linkedin, Github, Download, Phone, Home, Server, Code, User, Briefcase, MessageSquare } from 'lucide-react';
 
@@ -18,6 +17,7 @@ const ContactTerminal = () => {
   ]);
   const [isTyping, setIsTyping] = useState(false);
   const [typingQueue, setTypingQueue] = useState<OutputLine[]>([]);
+  const [pendingActions, setPendingActions] = useState<(() => void)[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
@@ -46,42 +46,82 @@ const ContactTerminal = () => {
     };
   }, []);
 
-  // Create typing sound effect
+  // Create smooth, noiseless typing sound effect
   const playTypingSound = () => {
     if (!audioContextRef.current) return;
     
     try {
       const oscillator = audioContextRef.current.createOscillator();
       const gainNode = audioContextRef.current.createGain();
+      const filter = audioContextRef.current.createBiquadFilter();
       
-      oscillator.connect(gainNode);
+      oscillator.connect(filter);
+      filter.connect(gainNode);
       gainNode.connect(audioContextRef.current.destination);
       
-      oscillator.frequency.setValueAtTime(800 + Math.random() * 200, audioContextRef.current.currentTime);
-      oscillator.type = 'square';
+      // Smooth sine wave for noiseless sound
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(440 + Math.random() * 100, audioContextRef.current.currentTime);
       
-      gainNode.gain.setValueAtTime(0.1, audioContextRef.current.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContextRef.current.currentTime + 0.1);
+      // Low-pass filter to make it smoother
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(800, audioContextRef.current.currentTime);
+      filter.Q.setValueAtTime(1, audioContextRef.current.currentTime);
+      
+      // Very gentle volume with smooth fade
+      gainNode.gain.setValueAtTime(0, audioContextRef.current.currentTime);
+      gainNode.gain.linearRampToValueAtTime(0.02, audioContextRef.current.currentTime + 0.01);
+      gainNode.gain.exponentialRampToValueAtTime(0.001, audioContextRef.current.currentTime + 0.08);
       
       oscillator.start();
-      oscillator.stop(audioContextRef.current.currentTime + 0.1);
+      oscillator.stop(audioContextRef.current.currentTime + 0.08);
     } catch (error) {
       // Silently handle audio errors
     }
   };
 
-  // Typing animation effect
+  // Execute pending actions gradually after typing completes
+  const executeActionsGradually = (actions: (() => void)[]) => {
+    if (actions.length === 0) return;
+    
+    let actionIndex = 0;
+    const executeNextAction = () => {
+      if (actionIndex < actions.length) {
+        // Add human-like delay between actions
+        setTimeout(() => {
+          actions[actionIndex]();
+          actionIndex++;
+          executeNextAction();
+        }, 800 + Math.random() * 400); // 800-1200ms delay between actions
+      }
+    };
+    
+    // Start executing actions after a brief pause
+    setTimeout(executeNextAction, 500);
+  };
+
+  // Typing animation effect with smoother timing
   const typeText = (text: string, onComplete: () => void) => {
     let currentIndex = 0;
-    const typingSpeed = 30 + Math.random() * 20; // Variable speed for realism
+    const baseSpeed = 40;
     
     const typeNextChar = () => {
       if (currentIndex < text.length) {
+        // Vary speed based on character type for more natural typing
+        const char = text[currentIndex];
+        let speed = baseSpeed;
+        
+        if (char === ' ') speed = baseSpeed * 0.3; // Faster for spaces
+        else if (char === '.' || char === ',' || char === '!') speed = baseSpeed * 2; // Slower for punctuation
+        else if (Math.random() < 0.1) speed = baseSpeed * 1.8; // Occasional hesitation
+        else speed = baseSpeed + (Math.random() * 20 - 10); // Slight variation
+        
         playTypingSound();
         currentIndex++;
-        setTimeout(typeNextChar, typingSpeed);
+        setTimeout(typeNextChar, speed);
       } else {
-        onComplete();
+        // Small pause before completing
+        setTimeout(onComplete, 150);
       }
     };
     
@@ -109,9 +149,15 @@ const ContactTerminal = () => {
         // Remove from queue and continue
         setTypingQueue(prev => prev.slice(1));
         setIsTyping(false);
+        
+        // If this was the last line and there are pending actions, execute them
+        if (typingQueue.length === 1 && pendingActions.length > 0) {
+          executeActionsGradually(pendingActions);
+          setPendingActions([]);
+        }
       });
     }
-  }, [typingQueue, isTyping]);
+  }, [typingQueue, isTyping, pendingActions]);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -139,53 +185,90 @@ const ContactTerminal = () => {
       { type: 'output', text: '  whoami             - About me' }
     ],
     'contact --email': () => {
-      navigator.clipboard.writeText('pradeeptraje@gmail.com');
+      const action = () => {
+        navigator.clipboard.writeText('pradeeptraje@gmail.com');
+      };
+      setPendingActions([action]);
       return [
         { type: 'success', text: '📧 Email: pradeeptraje@gmail.com' },
         { type: 'output', text: 'Email copied to clipboard!' }
       ];
     },
     'contact --phone': () => {
-      navigator.clipboard.writeText('+91 9226325101');
+      const action = () => {
+        navigator.clipboard.writeText('+91 9226325101');
+      };
+      setPendingActions([action]);
       return [
         { type: 'success', text: '📱 Phone: +91 9226325101' },
         { type: 'output', text: 'Phone number copied to clipboard!' }
       ];
     },
     'contact --linkedin': () => {
-      window.open('https://www.linkedin.com/in/pradeeptraje/', '_blank');
+      const action = () => {
+        window.open('https://www.linkedin.com/in/pradeeptraje/', '_blank');
+      };
+      setPendingActions([action]);
       return [{ type: 'success', text: '🔗 Opening LinkedIn profile...' }];
     },
     'contact --github': () => {
-      window.open('https://github.com/saineox', '_blank');
+      const action = () => {
+        window.open('https://github.com/saineox', '_blank');
+      };
+      setPendingActions([action]);
       return [{ type: 'success', text: '🐙 Opening GitHub profile...' }];
     },
-    'download --resume': () => [
-      { type: 'success', text: '📄 Downloading resume...' },
-      { type: 'output', text: 'Resume.pdf downloaded successfully!' }
-    ],
+    'download --resume': () => {
+      const action = () => {
+        // Simulate download action
+        console.log('Resume download initiated');
+      };
+      setPendingActions([action]);
+      return [
+        { type: 'success', text: '📄 Downloading resume...' },
+        { type: 'output', text: 'Resume.pdf downloaded successfully!' }
+      ];
+    },
     'navigate --home': () => {
-      scrollToSection('hero');
+      const action = () => {
+        scrollToSection('hero');
+      };
+      setPendingActions([action]);
       return [{ type: 'success', text: '🏠 Navigating to home section...' }];
     },
     'navigate --devops': () => {
-      scrollToSection('devops-philosophy');
+      const action = () => {
+        scrollToSection('devops-philosophy');
+      };
+      setPendingActions([action]);
       return [{ type: 'success', text: '⚙️ Navigating to DevOps philosophy section...' }];
     },
     'navigate --skills': () => {
-      scrollToSection('technical-arsenal');
+      const action = () => {
+        scrollToSection('technical-arsenal');
+      };
+      setPendingActions([action]);
       return [{ type: 'success', text: '🛠️ Navigating to skills section...' }];
     },
     'navigate --projects': () => {
-      scrollToSection('project-showcase');
+      const action = () => {
+        scrollToSection('project-showcase');
+      };
+      setPendingActions([action]);
       return [{ type: 'success', text: '📁 Navigating to projects section...' }];
     },
     'navigate --testimonials': () => {
-      scrollToSection('testimonials');
+      const action = () => {
+        scrollToSection('testimonials');
+      };
+      setPendingActions([action]);
       return [{ type: 'success', text: '💬 Navigating to testimonials section...' }];
     },
     'navigate --experience': () => {
-      scrollToSection('career-timeline');
+      const action = () => {
+        scrollToSection('career-timeline');
+      };
+      setPendingActions([action]);
       return [{ type: 'success', text: '📈 Navigating to experience section...' }];
     },
     status: () => [
@@ -210,6 +293,7 @@ const ContactTerminal = () => {
         { type: 'prompt', text: 'pradeep@contact:~$', id: (Date.now() + 1).toString(), isComplete: true }
       ]);
       setTypingQueue([]);
+      setPendingActions([]);
       return [];
     }
   };
@@ -312,7 +396,7 @@ const ContactTerminal = () => {
       if (!isComplete && displayText.length < text.length) {
         const timer = setTimeout(() => {
           setDisplayText(text.slice(0, displayText.length + 1));
-        }, 30 + Math.random() * 20);
+        }, 40 + Math.random() * 15);
         return () => clearTimeout(timer);
       }
     }, [displayText, text, isComplete]);
