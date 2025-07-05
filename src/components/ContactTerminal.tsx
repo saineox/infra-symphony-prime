@@ -478,21 +478,21 @@ const ContactTerminal = () => {
     );
   };
 
-  const navigationButtons = [
-    { command: 'navigate --home', icon: Home, label: 'Home', color: 'green' },
-    { command: 'navigate --devops', icon: Server, label: 'DevOps', color: 'blue' },
-    { command: 'navigate --skills', icon: Code, label: 'Skills', color: 'purple' },
-    { command: 'navigate --projects', icon: Briefcase, label: 'Projects', color: 'cyan' },
-    { command: 'navigate --testimonials', icon: MessageSquare, label: 'Testimonials', color: 'yellow' },
-    { command: 'navigate --experience', icon: User, label: 'Experience', color: 'pink' }
-  ];
-
-  const contactButtons = [
-    { command: 'contact --email', icon: Mail, label: 'Email', color: 'green' },
-    { command: 'contact --phone', icon: Phone, label: 'Phone', color: 'yellow' },
-    { command: 'contact --linkedin', icon: Linkedin, label: 'LinkedIn', color: 'blue' },
-    { command: 'contact --github', icon: Github, label: 'GitHub', color: 'purple' },
-    { command: 'download --resume', icon: Download, label: 'Resume', color: 'cyan' }
+  // Combined action buttons with better organization
+  const actionButtons = [
+    // Navigation section
+    { command: 'navigate --home', icon: Home, label: 'Home', color: 'green', category: 'nav' },
+    { command: 'navigate --devops', icon: Server, label: 'DevOps', color: 'blue', category: 'nav' },
+    { command: 'navigate --skills', icon: Code, label: 'Skills', color: 'purple', category: 'nav' },
+    { command: 'navigate --projects', icon: Briefcase, label: 'Projects', color: 'cyan', category: 'nav' },
+    { command: 'navigate --testimonials', icon: MessageSquare, label: 'Testimonials', color: 'yellow', category: 'nav' },
+    { command: 'navigate --experience', icon: User, label: 'Experience', color: 'pink', category: 'nav' },
+    // Contact section
+    { command: 'contact --email', icon: Mail, label: 'Email', color: 'green', category: 'contact' },
+    { command: 'contact --phone', icon: Phone, label: 'Phone', color: 'yellow', category: 'contact' },
+    { command: 'contact --linkedin', icon: Linkedin, label: 'LinkedIn', color: 'blue', category: 'contact' },
+    { command: 'contact --github', icon: Github, label: 'GitHub', color: 'purple', category: 'contact' },
+    { command: 'download --resume', icon: Download, label: 'Resume', color: 'cyan', category: 'contact' }
   ];
 
   return (
@@ -518,7 +518,7 @@ const ContactTerminal = () => {
             
             <div 
               ref={terminalRef}
-              className="h-96 overflow-y-auto mb-4 space-y-1 scroll-smooth"
+              className="h-72 overflow-y-auto mb-4 space-y-1 scroll-smooth"
               onClick={() => {
                 inputRef.current?.focus();
                 // Prevent any unwanted scrolling on terminal click
@@ -552,11 +552,11 @@ const ContactTerminal = () => {
             </form>
           </div>
 
-          {/* Navigation buttons - now positioned below terminal and will scroll naturally */}
-          <div className="mt-8 mb-6">
-            <h3 className="text-lg font-semibold text-gray-300 mb-4 text-center">Navigation</h3>
-            <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
-              {navigationButtons.map((btn) => (
+          {/* Combined action buttons - organized in a single grid */}
+          <div className="mt-8">
+            <h3 className="text-lg font-semibold text-gray-300 mb-4 text-center">Quick Actions</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+              {actionButtons.map((btn) => (
                 <button 
                   key={btn.command}
                   onClick={(e) => {
@@ -564,33 +564,24 @@ const ContactTerminal = () => {
                     handleQuickButton(btn.command);
                   }}
                   disabled={isTyping}
-                  className={`flex items-center justify-center px-3 py-2 bg-black/50 border border-gray-700 rounded-lg hover:border-${btn.color}-400 transition-all duration-300 group hover:scale-105 disabled:opacity-50 disabled:hover:scale-100`}
+                  className={`flex flex-col items-center justify-center px-3 py-3 bg-black/50 border border-gray-700 rounded-lg hover:border-${btn.color}-400 transition-all duration-300 group hover:scale-105 disabled:opacity-50 disabled:hover:scale-100 ${btn.category === 'nav' ? 'border-l-4 border-l-blue-500/50' : 'border-l-4 border-l-green-500/50'}`}
                 >
-                  <btn.icon className={`w-4 h-4 text-${btn.color}-400 mr-2 group-hover:animate-bounce`} />
-                  <span className="text-gray-300 font-sans text-sm">{btn.label}</span>
+                  <btn.icon className={`w-5 h-5 text-${btn.color}-400 mb-1 group-hover:animate-bounce`} />
+                  <span className="text-gray-300 font-sans text-xs text-center">{btn.label}</span>
                 </button>
               ))}
             </div>
-          </div>
-
-          {/* Contact buttons - also positioned to scroll naturally */}
-          <div>
-            <h3 className="text-lg font-semibold text-gray-300 mb-4 text-center">Contact & Actions</h3>
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-              {contactButtons.map((btn) => (
-                <button 
-                  key={btn.command}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleQuickButton(btn.command);
-                  }}
-                  disabled={isTyping}
-                  className={`flex items-center justify-center px-4 py-3 bg-black/50 border border-gray-700 rounded-lg hover:border-${btn.color}-400 transition-all duration-300 group hover:scale-105 disabled:opacity-50 disabled:hover:scale-100`}
-                >
-                  <btn.icon className={`w-5 h-5 text-${btn.color}-400 mr-2 group-hover:animate-bounce`} />
-                  <span className="text-gray-300 font-sans">{btn.label}</span>
-                </button>
-              ))}
+            
+            {/* Category indicators */}
+            <div className="flex justify-center gap-6 mt-4 text-sm text-gray-500">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-blue-500/50 rounded"></div>
+                <span>Navigation</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-green-500/50 rounded"></div>
+                <span>Contact & Actions</span>
+              </div>
             </div>
           </div>
         </div>
