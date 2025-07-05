@@ -33,8 +33,12 @@ const Navigation = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo/Brand */}
           <div className="flex items-center space-x-3">
-            <div className="relative w-10 h-10 bg-gradient-to-br from-green-400 via-blue-400 to-purple-400 rounded-xl flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-              <span className="text-black font-bold text-sm">PK</span>
+            <div className="relative w-10 h-10 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <img 
+                src="/lovable-uploads/417ac179-2146-4012-9a7b-05b995ed74c3.png" 
+                alt="Pradeep Kadam" 
+                className="w-full h-full object-cover"
+              />
               <div className="absolute inset-0 bg-gradient-to-br from-green-400/20 to-purple-400/20 rounded-xl animate-pulse"></div>
             </div>
             <span className="text-white font-semibold hidden sm:block bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent">Pradeep Kadam</span>
