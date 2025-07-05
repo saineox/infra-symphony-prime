@@ -10,6 +10,7 @@ const Hero = () => {
   const fullText = 'deploy --profile "Pradeep Kadam: DevOps Engineer & UI/UX Developer"';
 
   useEffect(() => {
+    console.log('Hero component mounted');
     if (currentIndex < fullText.length) {
       const timeout = setTimeout(() => {
         setTypedText(prev => prev + fullText[currentIndex]);
@@ -27,7 +28,7 @@ const Hero = () => {
 
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     console.log('Profile image failed to load:', e.currentTarget.src);
-    console.log('Attempting to load fallback or using initials');
+    console.log('Using fallback initials');
     setImageError(true);
     setImageLoaded(false);
   };
@@ -41,11 +42,14 @@ const Hero = () => {
       setImageError(false);
     };
     img.onerror = () => {
-      console.log('Image preload failed');
+      console.log('Image preload failed, using fallback');
       setImageError(true);
       setImageLoaded(false);
     };
-    img.src = '/lovable-uploads/417ac179-2146-4012-9a7b-05b995ed74c3.png';
+    
+    // Use absolute path for production
+    const imagePath = '/lovable-uploads/417ac179-2146-4012-9a7b-05b995ed74c3.png';
+    img.src = imagePath;
   }, []);
 
   return (
@@ -92,7 +96,7 @@ const Hero = () => {
           <div className="flex justify-center mb-8">
             <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-transparent bg-gradient-to-br from-green-400 via-blue-400 to-purple-400 p-1 shadow-lg hover:shadow-xl transition-all duration-300">
               <div className="w-full h-full rounded-full overflow-hidden bg-gray-800 flex items-center justify-center">
-                {!imageError ? (
+                {!imageError && (
                   <img 
                     src="/lovable-uploads/417ac179-2146-4012-9a7b-05b995ed74c3.png" 
                     alt="Pradeep Kadam Profile Picture"
@@ -101,8 +105,8 @@ const Hero = () => {
                     onError={handleImageError}
                     style={{ display: imageLoaded && !imageError ? 'block' : 'none' }}
                   />
-                ) : null}
-                {/* Fallback with initials - always show if image fails or hasn't loaded */}
+                )}
+                {/* Fallback with initials - show if image fails or hasn't loaded */}
                 {(imageError || !imageLoaded) && (
                   <div className="w-full h-full rounded-full bg-gradient-to-br from-green-500 to-blue-500 flex items-center justify-center text-white text-2xl font-bold">
                     PK
