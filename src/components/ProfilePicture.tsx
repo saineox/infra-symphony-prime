@@ -4,7 +4,7 @@ import React from 'react';
 const ProfilePicture = () => {
   return (
     <div className="relative w-48 h-48 mx-auto mb-8">
-      <div className="w-full h-full rounded-full overflow-hidden border-4 border-gradient-to-r from-green-400 via-blue-400 to-purple-400 shadow-2xl">
+      <div className="w-full h-full rounded-full overflow-hidden shadow-2xl">
         <img 
           src="/lovable-uploads/4e18bbe6-9029-4a52-b8bf-99c5281549ba.png" 
           alt="Pradeep Kadam - DevOps Engineer" 

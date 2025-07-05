@@ -518,7 +518,7 @@ const ContactTerminal = () => {
             
             <div 
               ref={terminalRef}
-              className="h-96 overflow-y-auto mb-4 space-y-1 scroll-smooth"
+              className="h-72 overflow-y-auto mb-4 space-y-1 scroll-smooth"
               onClick={() => {
                 inputRef.current?.focus();
                 // Prevent any unwanted scrolling on terminal click
