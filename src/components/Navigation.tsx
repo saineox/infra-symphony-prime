@@ -12,10 +12,10 @@ const Navigation = () => {
       const navHeight = 80; // Approximate height of navigation
       const elementPosition = element.offsetTop - navHeight;
       
-      // Create a longer, more gradual scroll animation with enhanced easing
+      // Create a faster scroll animation with enhanced easing
       const startPosition = window.pageYOffset;
       const distance = elementPosition - startPosition;
-      const duration = 3500; // 3.5 seconds for slower, smoother scroll
+      const duration = 1500; // 1.5 seconds for faster scrolling
       let startTime: number | null = null;
 
       // Enhanced easing function for smoother, more elegant scrolling
