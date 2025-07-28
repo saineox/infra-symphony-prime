@@ -8,11 +8,37 @@ const Navigation = () => {
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
-      // Smooth scroll with better positioning
-      element.scrollIntoView({ 
-        behavior: 'smooth',
-        block: 'start'
-      });
+      // Calculate position with navigation height offset
+      const navHeight = 80; // Approximate height of navigation
+      const elementPosition = element.offsetTop - navHeight;
+      
+      // Create a longer, more gradual scroll animation with enhanced easing
+      const startPosition = window.pageYOffset;
+      const distance = elementPosition - startPosition;
+      const duration = 3500; // 3.5 seconds for slower, smoother scroll
+      let startTime: number | null = null;
+
+      // Enhanced easing function for smoother, more elegant scrolling
+      const easeInOutCubic = (t: number): number => {
+        return t < 0.5 
+          ? 4 * t * t * t 
+          : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      };
+
+      const animateScroll = (currentTime: number) => {
+        if (startTime === null) startTime = currentTime;
+        const timeElapsed = currentTime - startTime;
+        const progress = Math.min(timeElapsed / duration, 1);
+        const ease = easeInOutCubic(progress);
+        
+        window.scrollTo(0, startPosition + distance * ease);
+        
+        if (progress < 1) {
+          requestAnimationFrame(animateScroll);
+        }
+      };
+
+      requestAnimationFrame(animateScroll);
       setIsOpen(false);
     }
   };
