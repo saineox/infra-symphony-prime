@@ -182,7 +182,7 @@ const ContactTerminal = () => {
     }
   };
 
-  // Enhanced scroll to section with longer scroll duration
+  // Enhanced scroll to section with longer scroll duration and smoother easing
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -190,21 +190,24 @@ const ContactTerminal = () => {
       const navHeight = 80; // Approximate height of navigation
       const elementPosition = element.offsetTop - navHeight;
       
-      // Create a longer, more gradual scroll animation
+      // Create a longer, more gradual scroll animation with enhanced easing
       const startPosition = window.pageYOffset;
       const distance = elementPosition - startPosition;
-      const duration = 2000; // Increased from default to 2 seconds
+      const duration = 3500; // Increased from 2000ms to 3500ms for slower scroll
       let startTime: number | null = null;
 
-      const easeInOutQuad = (t: number): number => {
-        return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+      // Enhanced easing function for smoother, more elegant scrolling
+      const easeInOutCubic = (t: number): number => {
+        return t < 0.5 
+          ? 4 * t * t * t 
+          : 1 - Math.pow(-2 * t + 2, 3) / 2;
       };
 
       const animateScroll = (currentTime: number) => {
         if (startTime === null) startTime = currentTime;
         const timeElapsed = currentTime - startTime;
         const progress = Math.min(timeElapsed / duration, 1);
-        const ease = easeInOutQuad(progress);
+        const ease = easeInOutCubic(progress);
         
         window.scrollTo(0, startPosition + distance * ease);
         
