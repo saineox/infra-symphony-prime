@@ -18,10 +18,24 @@ const ContactTerminal = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [typingQueue, setTypingQueue] = useState<OutputLine[]>([]);
   const [pendingActions, setPendingActions] = useState<(() => void)[]>([]);
+  const [hasAutoExecuted, setHasAutoExecuted] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
   const terminalContainerRef = useRef<HTMLDivElement>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
+
+  // Auto-execute navigate --home command after page load
+  useEffect(() => {
+    if (!hasAutoExecuted) {
+      const timer = setTimeout(() => {
+        console.log('Auto-executing navigate --home command...');
+        executeCommand('navigate --home');
+        setHasAutoExecuted(true);
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [hasAutoExecuted]);
 
   // Initialize audio context
   useEffect(() => {
